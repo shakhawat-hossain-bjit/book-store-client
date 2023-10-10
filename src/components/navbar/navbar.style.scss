@@ -92,17 +92,17 @@ nav {
   p {
     position: absolute;
     z-index: 2;
-    padding: 2px 4px;
+    padding: 2px 5px;
     margin: 0px;
     background-color: rgb(247, 117, 117);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     border-radius: 50%;
-    right: 15px;
+    right: 13px;
     top: 5px;
   }
 }
 
-.navbar-cart:hover .navbar-cart {
-  // color: white !important;
+.navbar-cart:hover p {
+  color: rgb(228, 224, 224);
 }
