@@ -1,0 +1,18 @@
+.book-section-container{
+    margin-top: 80px;
+    margin-bottom: 80px;
+    .book-section-title{
+        h2{
+            text-align: center;
+            font-size: 35px;
+        } 
+    }
+    .book-section-page-container{
+        margin: 40px 0px;
+    }
+}
+
+.book-section-cards{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
