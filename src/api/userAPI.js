@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import axiosInstance from "../utils/axiosCreate";
+import { axiosInstance } from "../utils/axiosCreate";
 import {
   loadUserInfo,
   loadingFinishedReducer,

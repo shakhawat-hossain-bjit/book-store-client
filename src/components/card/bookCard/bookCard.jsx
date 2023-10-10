@@ -4,8 +4,9 @@ import demobook from "../../../assets/images/demoBook.png";
 import Spinner from "../../spinner/spinner";
 import { SlHeart } from "react-icons/sl";
 import cartAPI from "../../../api/cartAPI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addToCartReducer } from "../../../store/slices/cartReducer";
 
 const BookCard = ({ props }) => {
   const [imageState, setImageState] = useState(0);
@@ -14,7 +15,8 @@ const BookCard = ({ props }) => {
   const { title, author, price, language, category, _id, images } = props;
   const { email, role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  const { addToCartReducer } = cartAPI();
+  const { addToCart } = cartAPI();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loadImages = async () => {
@@ -51,21 +53,35 @@ const BookCard = ({ props }) => {
   };
 
   const cartButton = (e) => {
+    e.stopPropagation();
     setIsLoading(true);
     setMessage("");
-    console.log("cart button clicked ", _id);
-    e.stopPropagation();
+    // console.log("cart button clicked ", _id);
     if (userId) {
       const obj = {
         userId: userId,
         bookId: _id,
         amount: 1,
       };
-      addToCartReducer(obj)
+      // console.log("first ", obj);
+      addToCart(obj)
         .then((data) => {
           // console.log(data?.data);
           setMessage("succssfully added to cart");
-          dispatch(addToCartReducer(data?.data?.cartBook));
+          const { _id, author, title, language, rating, stock, images, price } =
+            data?.data?.currentBook;
+          dispatch(
+            addToCartReducer({
+              _id,
+              author,
+              title,
+              language,
+              rating,
+              stock,
+              images,
+              price,
+            })
+          );
         })
         .catch((e) => {
           console.log(e);

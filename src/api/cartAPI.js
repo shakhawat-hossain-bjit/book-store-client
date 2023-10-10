@@ -1,13 +1,14 @@
 import { useDispatch } from "react-redux";
-import axiosInstance from "../utils/axiosCreate";
+import { axiosInstance, axiosInstanceToken } from "../utils/axiosCreate";
 import { useNavigate } from "react-router";
 
 const cartAPI = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const addToCartReducer = async (obj) => {
-    let data = await axiosInstance
+  const addToCart = async (obj) => {
+    console.log(obj);
+    let data = await axiosInstanceToken
       .post(`/cart/add-book`, obj)
       .then((res) => res.data);
     return data;
@@ -24,7 +25,7 @@ const cartAPI = () => {
     //   });
   };
 
-  const RemoveFromCartReducer = async (obj) => {
+  const RemoveFromCart = async (obj) => {
     let data = await axiosInstance
       .post(`/cart/remove-book`, obj)
       .then((res) => res.data);
@@ -66,8 +67,8 @@ const cartAPI = () => {
   // };
 
   return {
-    addToCartReducer,
-    RemoveFromCartReducer,
+    addToCart,
+    RemoveFromCart,
   };
 };
 
