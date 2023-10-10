@@ -109,7 +109,7 @@ const CartItem = ({ props }) => {
 
   return (
     <div className="cart-item-info">
-      <div class="cart-item-img-container">
+      <div className="cart-item-img-container">
         {imageState == 0 ? (
           <div style={{ width: "100px", height: "130px" }}>
             <Spinner />
@@ -124,28 +124,28 @@ const CartItem = ({ props }) => {
         )}
       </div>
 
-      <div class="cart-item-title-container">
-        <h3 class="cart-item-title">{title}</h3>
-        {author && <h5 class="cart-item-author-container">By {author}</h5>}
+      <div className="cart-item-title-container">
+        <h3 className="cart-item-title">{title}</h3>
+        {author && <h5 className="cart-item-author-container">By {author}</h5>}
       </div>
-      <div class="cart-item-price-container">
-        <p class="cart-item-price">{price}</p>
+      <div className="cart-item-price-container">
+        <p className="cart-item-price">{price}</p>
       </div>
 
-      <div class="cart-button-container">
+      <div className="cart-button-container">
         <button className="cart-item-decrease-btn" onClick={() => removeItem()}>
           <MdRemove />
         </button>
-        <div class="cart-quantity-container">
-          <p class="">{quantity}</p>
+        <div className="cart-quantity-container">
+          <p className="">{quantity}</p>
         </div>
         <button className="cart-item-increase-btn" onClick={() => addItem()}>
           <MdAdd />
         </button>
       </div>
 
-      <div class="cart-item-sub-total-container">
-        <p class="cart-item-sub-total">{price * quantity}</p>
+      <div className="cart-item-sub-total-container">
+        <p className="cart-item-sub-total">{price * quantity}</p>
       </div>
     </div>
   );

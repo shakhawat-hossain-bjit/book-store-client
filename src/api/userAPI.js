@@ -12,22 +12,11 @@ const userAPI = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const logInUser = (userInfo) => {
-    axiosInstance
+  const logInUser = async (userInfo) => {
+    let data = await axiosInstance
       .post(`/auth/log-in`, userInfo)
-      .then((res) => res.data)
-      .then((data) => {
-        // console.log(data?.data);
-        navigate("/");
-        dispatch(logInReducer(data?.data));
-      })
-      .catch((e) => {
-        console.log(e);
-        console.log("Error: ", e?.response?.statusText);
-      })
-      .finally(() => {
-        dispatch(loadingFinishedReducer("isLoadingLogin"));
-      });
+      .then((res) => res.data);
+    return data;
   };
 
   const registerUser = async (userInfo) => {

@@ -3,6 +3,7 @@ import "./navbar.style.scss";
 import BookWormLogo from "../bookWormLogo/bookWormLogo";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { SlHeart, SlHandbag, SlUser } from "react-icons/sl";
+import { GrUserAdmin } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutReducer } from "../../store/slices/userReducer";
 import userAPI from "../../api/userAPI";
@@ -10,6 +11,7 @@ import { searchBookKeywordReducer } from "../../store/slices/bookReducer";
 
 const Navbar = () => {
   const location = useLocation();
+  const [showDropdown, setShowDropdown] = useState();
   const [userInfo, setUserInfo] = useState({});
   const [search, setSearch] = useState("");
   const [cartLength, setCartLength] = useState("");
@@ -47,15 +49,17 @@ const Navbar = () => {
     setCartLength(books?.length);
   }, [books]);
 
-  useEffect(() => {
-    // console.log("location ", location);
-    if ((location.pathname = "/cart")) {
-      const timer = setTimeout(() => {
-        console.log("fetching cart.......................................");
-      }, 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   // console.log("location ", location);
+  //   if ((location.pathname = "/cart")) {
+  //     const timer = setTimeout(() => {
+  //       console.log("fetching cart.......................................");
+  //     }, 10000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [location]);
+
+  // console.log(showDropdown);
 
   return (
     <nav className="nav-container">
@@ -74,15 +78,12 @@ const Navbar = () => {
               onKeyUp={(e) => setSearch(e?.target?.value)}
             />
           </div>
-          {/* <li>
+          <li>
             <Link to="/home">Home</Link>
-          </li> */}
-          {/* <li>
-            <Link to="/categories">Categories</Link>
           </li>
           <li>
-            <Link to="/shops">Shops</Link>
-          </li> */}
+            <Link to="/books">Books</Link>
+          </li>
           <li>
             <Link to="/wishlist">
               <SlHeart className="icon" size={24} />
@@ -91,35 +92,52 @@ const Navbar = () => {
           <li>
             <div>
               <Link to="/cart" className="navbar-cart">
-                <p>{cartLength}</p>
+                {cartLength > 0 && <p>{cartLength}</p>}
+
                 <SlHandbag className="icon" size={24} />
               </Link>
             </div>
           </li>
-          {/* <li>
-            <Link href="/others">Others</Link>
-          </li> */}
-          {userInfo?.email ? (
-            <li>
-              <button
-                className="logout-btn"
-                onClick={() => {
-                  logOutUser();
-                }}
-              >
-                Log Out
-              </button>
-            </li>
-          ) : (
-            <li>
-              <div className="">
-                <Link to="/login">
-                  <SlUser className="icon" size={24} />
+          <li
+            className="profile-section"
+            onMouseOver={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
+            {userInfo.email ? (
+              <Link to="/">
+                <GrUserAdmin className="icon" size={24} />
+              </Link>
+            ) : (
+              <Link to="/">
+                <SlUser className="icon" size={24} />
+              </Link>
+            )}
+          </li>
+        </div>
+        {showDropdown && (
+          <div
+            className="profile-drop-down"
+            onMouseOver={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
+            {userInfo.email ? (
+              <div className="options">
+                <Link to="/" onClick={() => logOutUser()}>
+                  Log Out
                 </Link>
               </div>
-            </li>
-          )}
-        </div>
+            ) : (
+              <div className="options">
+                <div>
+                  <Link to="/login">Log In</Link>
+                </div>
+                <div>
+                  <Link to="/register">Register</Link>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </ul>
     </nav>
   );

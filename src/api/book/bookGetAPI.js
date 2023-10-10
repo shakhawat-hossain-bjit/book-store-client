@@ -1,14 +1,14 @@
 import { useDispatch } from "react-redux";
-import { axiosInstance } from "../utils/axiosCreate";
+import { axiosInstance } from "../../utils/axiosCreate";
 import {
   loadAllBookReducer,
   loadBookByRatingDescReducer,
   loadBooksByPriceAscReducer,
   loadBooksByViewDescReducer,
   lodingFinishedReducer,
-} from "../store/slices/bookReducer";
+} from "../../store/slices/bookReducer";
 
-const bookAPI = () => {
+const bookGetAPI = () => {
   const dispatch = useDispatch();
 
   const getAllBooks = () => {
@@ -92,4 +92,4 @@ const bookAPI = () => {
   };
 };
 
-export default bookAPI;
+export default bookGetAPI;

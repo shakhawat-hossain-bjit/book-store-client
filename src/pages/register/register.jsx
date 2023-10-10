@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/passwordInput";
 import userAPI from "../../api/userAPI";
 import { useSelector } from "react-redux";
+import { bottomEndToast } from "../../utils/swalCreate";
+import Loader from "../../loader/loader";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +52,7 @@ const Register = () => {
     setIsLoading(true);
     registerUser(registerInfo)
       .then((data) => {
-        console.log(data?.data);
+        // console.log(data?.data);
         alert("successfully register the user, check email");
         reset({
           email: "",
@@ -59,28 +61,44 @@ const Register = () => {
           confirmPassword: "",
           userName: "",
         });
+
+        bottomEndToast.fire({
+          icon: "success",
+          title: "Successfully registered the user",
+        });
       })
       .catch((e) => {
-        console.log(e);
-        // console.log("Error: ", e?.response?.statusText);
-        alert("Faied to register user");
-        if (e?.response?.statusText == "Conflict") {
-          if (
-            e?.response?.data?.error?.some((obj) => obj.path === "userName")
-          ) {
-            setError("userName", {
-              type: "manual",
-              message: "userName is not available",
-            });
-          }
+        // console.log(e);
 
-          if (e?.response?.data?.error?.some((obj) => obj.path === "email")) {
-            setError("email", {
-              type: "manual",
-              message: "email is not available",
-            });
-          }
+        // if (e?.response?.statusText == "Conflict") {
+        //   if (
+        //     e?.response?.data?.error?.some((obj) => obj.path === "userName")
+        //   ) {
+        //     setError("userName", {
+        //       type: "manual",
+        //       message: "userName is not available",
+        //     });
+        //   }
+
+        //   if (e?.response?.data?.error?.some((obj) => obj.path === "email")) {
+        //     setError("email", {
+        //       type: "manual",
+        //       message: "email is not available",
+        //     });
+        //   }
+        // }
+
+        console.log(e);
+        let message = "";
+        if (e?.response?.data?.message) {
+          message = e?.response?.data?.message;
+        } else {
+          message = "Failed to log in!";
         }
+        bottomEndToast.fire({
+          icon: "error",
+          title: message,
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -89,6 +107,11 @@ const Register = () => {
 
   return (
     <div className="register-container">
+      {isLoading && (
+        <div>
+          <Loader />
+        </div>
+      )}
       <form
         onSubmit={handleSubmit(handleRegister)}
         className="register-form"

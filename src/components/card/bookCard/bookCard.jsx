@@ -3,6 +3,7 @@ import "./bookCard.scss";
 import demobook from "../../../assets/images/demoBook.png";
 import Spinner from "../../spinner/spinner";
 import { SlHeart } from "react-icons/sl";
+import { MdDelete } from "react-icons/md";
 import cartAPI from "../../../api/cartAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +11,8 @@ import {
   addToCartReducer,
   removeFromCartReducer,
 } from "../../../store/slices/cartReducer";
+import { bottomEndToast } from "../../../utils/swalCreate";
+import bookAPI from "../../../api/book/bookAPI";
 
 const BookCard = ({ props }) => {
   const [imageState, setImageState] = useState(0);
@@ -17,6 +20,7 @@ const BookCard = ({ props }) => {
   const [message, setMessage] = useState("");
   const { title, author, price, language, category, _id, images } = props;
   const { email, role, userId } = useSelector((state) => state.user);
+  const { deleteBook } = bookAPI();
   const navigate = useNavigate();
   const { addToCart } = cartAPI();
   const dispatch = useDispatch();
@@ -66,11 +70,72 @@ const BookCard = ({ props }) => {
     // }
   };
 
-  const cartButton = (e) => {
-    // console.log("cart button clicked ", _id);
+  // const BookCard = (e) => {
+  //   // console.log("cart button clicked ", _id);
+  //   e.stopPropagation();
+  //   setIsLoading(true);
+  //   if (userId) {
+  //     const obj = {
+  //       userId: userId,
+  //       bookId: _id,
+  //       amount: 1,
+  //     };
+  //     // console.log("first ", obj);
+  //     addToCart(obj)
+  //       .then((data) => {
+  //         // console.log(data?.data);
+  //         const { _id, author, title, language, rating, stock, images, price } =
+  //           data?.data?.currentBook;
+  //         dispatch(
+  //           addToCartReducer({
+  //             _id,
+  //             author,
+  //             title,
+  //             language,
+  //             rating,
+  //             stock,
+  //             images,
+  //             price,
+  //           })
+  //         );
+  //         bottomEndToast.fire({
+  //           icon: "success",
+  //           title: "Successfully added to cart",
+  //         });
+  //       })
+  //       .catch((e) => {
+  //         // console.log(e);
+  //         let message = "";
+  //         if (e?.response?.data?.message) {
+  //           // console.log("Error: ", e?.response?.data?.message);
+  //           message = e?.response?.data?.message;
+  //         } else {
+  //           message = "Failed to log in!";
+  //         }
+  //         bottomEndToast.fire({
+  //           icon: "error",
+  //           title: message,
+  //         });
+  //       })
+  //       .finally(() => {
+  //         setIsLoading(false);
+  //       });
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // };
+
+  const cardClicked = () => {
+    console.log("card clicked");
+  };
+
+  const bookEditButton = () => {
     e.stopPropagation();
-    setIsLoading(true);
-    setMessage("");
+    navigate("/admin/update-book");
+  };
+
+  const cartButton = () => {
+    e.stopPropagation();
     if (userId) {
       const obj = {
         userId: userId,
@@ -78,14 +143,13 @@ const BookCard = ({ props }) => {
         amount: 1,
       };
       // console.log("first ", obj);
-      addToCart(obj)
+      addToCart(_id)
         .then((data) => {
           // console.log(data?.data);
-          setMessage("succssfully added to cart");
           const { _id, author, title, language, rating, stock, images, price } =
             data?.data?.currentBook;
           dispatch(
-            addToCartReducer({
+            deleteBook({
               _id,
               author,
               title,
@@ -96,22 +160,30 @@ const BookCard = ({ props }) => {
               price,
             })
           );
+          bottomEndToast.fire({
+            icon: "success",
+            title: "Successfully added to cart",
+          });
+          removeFromCartReducer();
         })
         .catch((e) => {
-          console.log(e);
-          // console.log("Error: ", e?.response?.statusText);
-          setMessage("Faied to add to cart");
+          // console.log(e);
+          let message = "";
+          if (e?.response?.data?.message) {
+            // console.log("Error: ", e?.response?.data?.message);
+            message = e?.response?.data?.message;
+          } else {
+            message = "Failed to log in!";
+          }
+          bottomEndToast.fire({
+            icon: "error",
+            title: message,
+          });
         })
         .finally(() => {
           setIsLoading(false);
         });
-    } else {
-      navigate("/login");
     }
-  };
-
-  const cardClicked = () => {
-    console.log("card clicked");
   };
 
   // console.log(title, imageState);
@@ -141,22 +213,37 @@ const BookCard = ({ props }) => {
           <p>{price}</p>
         </div>
 
-        <div className="book-card-cart">
-          {/* <div style={{ display: "flex", justifyContent: "space-between" }}> */}
-          <button
-            className="book-card-cart-button"
-            onClick={(e) => cartButton(e)}
-          >
-            Add to Cart
-          </button>
-          <button
-            className="book-card-favourite-button"
-            onClick={(e) => favouriteButton(e)}
-          >
-            <SlHeart />
-          </button>
-          {/* </div> */}
-        </div>
+        {role == 2 ? (
+          <div className="book-card-cart">
+            <button
+              className="book-card-cart-button"
+              onClick={(e) => cartButton(e)}
+            >
+              Add to Cart
+            </button>
+            <button
+              className="book-card-favourite-button"
+              onClick={(e) => favouriteButton(e)}
+            >
+              <SlHeart />
+            </button>
+          </div>
+        ) : (
+          <div className="book-card-cart">
+            <button
+              className="book-card-cart-button"
+              onClick={(e) => bookEditButton(e)}
+            >
+              Edit Book
+            </button>
+            <button
+              className="book-card-favourite-button"
+              onClick={(e) => bookDeleteButton(e)}
+            >
+              <MdDelete />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

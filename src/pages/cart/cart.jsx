@@ -15,9 +15,9 @@ const Cart = () => {
   return (
     <div>
       <div className="container">
-        <div class=" cart-container">
-          <h1 class="cart-title">Cart</h1>
-          <div class="cart-item-container">
+        <div className=" cart-container">
+          <h1 className="cart-title">Cart</h1>
+          <div className="cart-item-container">
             <hr />
             {cartItems?.map((x) => (
               <CartItem props={x} key={x?.book?.id} />

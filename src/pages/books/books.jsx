@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import bookAPI from "../../api/bookAPI";
+import bookGetAPI from "../../api/book/bookGetAPI";
 import { useSelector } from "react-redux";
 import "./books.style.scss";
 import Spinner from "../../components/spinner/spinner";
@@ -13,7 +13,7 @@ const Books = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const { searchKeyWord } = useSelector((state) => state.books);
-  const { getSearchedBook } = bookAPI();
+  const { getSearchedBook } = bookGetAPI();
 
   useEffect(() => {
     setSearchedText(searchKeyWord);

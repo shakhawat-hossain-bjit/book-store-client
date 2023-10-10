@@ -3,7 +3,7 @@ import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import "./bestSelling.style.scss";
 import BookCard from "../card/bookCard/bookCard";
 import { useSelector } from "react-redux";
-import bookAPI from "../../api/bookAPI";
+import bookGetAPI from "../../api/book/bookGetAPI";
 import Spinner from "../spinner/spinner";
 
 const BestSelling = () => {
@@ -12,7 +12,7 @@ const BestSelling = () => {
   const [visibleBooks, setVisibleBooks] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   let limit = 5;
-  const { getAllBooks } = bookAPI();
+  const { getAllBooks } = bookGetAPI();
 
   let { allBooks, isLoadingAllBook } = useSelector((state) => state.books);
 

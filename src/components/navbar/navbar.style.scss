@@ -5,13 +5,18 @@ nav {
   // top: 0px;
   // z-index: 5;
   // border-top: 1px solid rgba(181, 180, 180, 0.733);
-  border-bottom: 1px solid rgba(181, 180, 180, 0.733);
-  padding: 20px 0px;
+  
+  // padding: 5px 0px;
 }
 
 .nav-container {
   // display: flex;
   // justify-content: space-between;
+  border-bottom: 1px solid rgba(181, 180, 180, 0.733);
+  ul{
+    // padding: 15px 0px;
+    
+  }
   .nav-logo {
     display: flex;
     justify-content: center;
@@ -45,7 +50,7 @@ nav {
     display: block;
     color: rgb(9, 9, 9);
     text-align: center;
-    padding: 20px 20px;
+    padding: 30px 20px;
     text-decoration: none;
   }
 
@@ -56,6 +61,7 @@ nav {
 
 nav {
   ul {
+    position: relative;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -99,10 +105,44 @@ nav {
     font-weight: bold;
     border-radius: 50%;
     right: 13px;
-    top: 5px;
+    top: 15px;
   }
 }
 
 .navbar-cart:hover p {
   color: rgb(228, 224, 224);
+}
+
+.profile-drop-down{
+  position: absolute;
+  z-index: 4;
+  right:-20px ;
+  top:90px ;
+  width: 140px;
+  border:1px solid rgb(104, 104, 104);
+  background-color: white;
+  // border-radius: 5px;
+  text-align: center;
+  div{
+    border-radius: 5px;
+    border-bottom: 1px solid gray;
+    padding: 5px 0px;
+  }
+  div:last-child{
+    border: none;
+  }
+  .options{
+    div:hover a{
+      // background-color: rgb(233, 233, 233);
+      margin-left: 10px;
+      color: tomato;
+      transition:  margin-left .2s;
+    }
+    a {
+      color: rgb(9, 9, 9);
+      text-decoration: none;
+    }
+  }
+  
+  
 }

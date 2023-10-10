@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavSections from "../navSections/navSections";
 import "./featuredBooks.style.scss";
 import BookCard from "../card/bookCard/bookCard";
-import bookAPI from "../../api/bookAPI";
+import bookGetAPI from "../../api/book/bookGetAPI";
 import { useSelector } from "react-redux";
 import Spinner from "../spinner/spinner";
 
@@ -11,7 +11,7 @@ const FeaturedBooks = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSection, setSelectedSection] = useState(0);
   const { getBooksByPriceAsc, getBooksByRatingDesc, getBooksByViewDesc } =
-    bookAPI();
+    bookGetAPI();
   const sectionName = ["featured", "on sale", "most viewed"];
   const userSelectedSection = (index) => {
     setSelectedSection(index);

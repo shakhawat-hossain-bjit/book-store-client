@@ -4,11 +4,19 @@ import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/passwordInput";
 import userAPI from "../../api/userAPI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../loader/loader";
+import {
+  loadingFinishedReducer,
+  logInReducer,
+} from "../../store/slices/userReducer";
+import { bottomEndToast } from "../../utils/swalCreate";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { email } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const { email, isLoadingLogin } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (email) {
@@ -31,12 +39,48 @@ const Login = () => {
   });
 
   const handleLogin = (data) => {
-    console.log(data);
-    logInUser({ email: getValues("email"), password: getValues("password") });
+    // console.log(data);
+    setIsLoading(true);
+    logInUser({ email: getValues("email"), password: getValues("password") })
+      .then((data) => {
+        // console.log(data?.data);
+        bottomEndToast.fire({
+          icon: "success",
+          title: "Logged in successfully",
+        });
+        navigate("/");
+        dispatch(logInReducer(data?.data));
+      })
+      .catch((e) => {
+        console.log(e);
+        let message = "";
+        if (e?.response?.data?.message) {
+          // console.log("Error: ", e?.response?.data?.message);
+          message = e?.response?.data?.message;
+        } else {
+          message = "Failed to log in!";
+        }
+        bottomEndToast.fire({
+          icon: "error",
+          title: message,
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+        dispatch(loadingFinishedReducer("isLoadingLogin"));
+      });
   };
+
+  console.log("isLoading ", isLoading);
 
   return (
     <div className="login-container">
+      {isLoading && (
+        <div>
+          <Loader />
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit(handleLogin)}
         className="login-form"

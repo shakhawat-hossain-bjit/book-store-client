@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import userAPI from "../../api/userAPI";
 
 const UserRoute = () => {
   const [userInfo, setUserInfo] = useState({});
   const { email, role, userName } = useSelector((state) => state.user);
   const { checkUser } = userAPI();
 
-  useEffect(() => {
-    setUserInfo({ email, role, userInfo });
-  }, [email, role, userName]);
+  // useEffect(() => {
+  //   setUserInfo({ email, role, userName });
+  // }, [email]);
+  // console.log("userInfo ", userInfo);
 
-  return userInfo?.role == email ? <Outlet /> : <Navigate to="/" />;
+  return email ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default UserRoute;
