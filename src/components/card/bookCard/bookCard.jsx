@@ -6,7 +6,10 @@ import { SlHeart } from "react-icons/sl";
 import cartAPI from "../../../api/cartAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addToCartReducer } from "../../../store/slices/cartReducer";
+import {
+  addToCartReducer,
+  removeFromCartReducer,
+} from "../../../store/slices/cartReducer";
 
 const BookCard = ({ props }) => {
   const [imageState, setImageState] = useState(0);
@@ -48,15 +51,26 @@ const BookCard = ({ props }) => {
   }, [images]);
 
   const favouriteButton = (e) => {
-    // console.log("favourite button clicked");
+    console.log("favourite button clicked");
     e.stopPropagation();
+    // if (userId) {
+    //   const obj = {
+    //     userId: userId,
+    //     bookId: _id,
+    //     amount: 1,
+    //   };
+
+    //   dispatch(removeFromCartReducer(_id));
+    // } else {
+    //   navigate("/login");
+    // }
   };
 
   const cartButton = (e) => {
+    // console.log("cart button clicked ", _id);
     e.stopPropagation();
     setIsLoading(true);
     setMessage("");
-    // console.log("cart button clicked ", _id);
     if (userId) {
       const obj = {
         userId: userId,

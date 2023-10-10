@@ -4,7 +4,7 @@ import Navbar from "./components/navbar/navbar";
 import Banner from "./components/banner/banner";
 import Footer from "./components/footer/footer";
 import PreNavbar from "./components/preNavbar/preNavbar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import BestSelling from "./components/bestSelling/bestSelling";
 import FeaturedBooks from "./components/featuredBooks/featuredBooks";
 import Login from "./pages/logIn/logIn";
@@ -16,8 +16,17 @@ import WishList from "./pages/wishList/wishList";
 import AdminRoute from "./pages/authenticate/adminRoute";
 import UserRoute from "./pages/authenticate/userRoute";
 import Books from "./pages/books/books";
+import { useSelector } from "react-redux";
+import cartAPI from "./api/cartAPI";
 
 function App() {
+  const { userId } = useSelector((state) => state.user);
+  const { loadCart } = cartAPI();
+
+  useEffect(() => {
+    if (userId) loadCart(userId);
+  }, [userId]);
+
   return (
     <>
       <BrowserRouter>

@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   books: [],
   isLoadingCart: false,
-  // isLoadingAdd: false,
-  // isLoadingRemove: false,
+  isLoadingAdd: false,
+  isLoadingRemove: false,
 };
 
 const cartSlice = createSlice({
@@ -17,16 +17,15 @@ const cartSlice = createSlice({
     },
     addToCartReducer: (state, action) => {
       // state.isLoadingAdd = true;
-      // state.books.push(action.payload);
-      console.log("reducer ", action?.payload);
+      // console.log("reducer ", action?.payload);
       const obj = {};
       let isExist = false;
       const mappedBooks = state?.books?.map((x) => {
         if (x.book._id == action?.payload?._id) {
-          console.log("found");
-          obj.book = action.payload;
+          // console.log("found");
           obj.quantity = x.quantity + 1;
           obj.price = x.price;
+          obj.book = action.payload;
           isExist = true;
           return obj;
         }
@@ -40,19 +39,25 @@ const cartSlice = createSlice({
         obj.book = action.payload;
         mappedBooks.push(obj);
       }
-
-      console.log("mappedBooks ", mappedBooks);
-
+      // console.log("mappedBooks ", mappedBooks);
       state.books = mappedBooks;
     },
 
     removeFromCartReducer: (state, action) => {
       // state.isLoadingRemove = true;
-      state.books.push(action.payload);
-      const filteredBooks = state.books.filter(
-        (x) => x._id != action?.payload?._id
-      );
-      state.books = filteredBooks;
+      // console.log("reducer ", action?.payload);
+      const mappedBooks = state?.books?.filter((x) => {
+        if (x.book._id != action?.payload) {
+          return x;
+        } else {
+          if (x.quantity > 1) {
+            x.quantity = x.quantity - 1;
+            return x;
+          }
+        }
+      });
+      // console.log("mappedBooks ", mappedBooks);
+      state.books = mappedBooks;
     },
 
     lodingFinishedReducer: (state, action) => {

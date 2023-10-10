@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
 import { axiosInstance, axiosInstanceToken } from "../utils/axiosCreate";
 import { useNavigate } from "react-router";
+import { loadCartReducer } from "../store/slices/cartReducer";
 
 const cartAPI = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const addToCart = async (obj) => {
@@ -26,8 +26,8 @@ const cartAPI = () => {
   };
 
   const RemoveFromCart = async (obj) => {
-    let data = await axiosInstance
-      .post(`/cart/remove-book`, obj)
+    let data = await axiosInstanceToken
+      .patch(`/cart/remove-book`, obj)
       .then((res) => res.data);
     return data;
     //   .then((data) => {
@@ -43,32 +43,28 @@ const cartAPI = () => {
     //   });
   };
 
-  // const checkUser = () => {
-  //   let token = localStorage.getItem("token");
-  //   console.log(token);
-  //   if (token) {
-  //     axiosInstance
-  //       .get(`/auth/check-me/${token}`)
-  //       .then((res) => res.data)
-  //       .then((data) => {
-  //         // user is valid
-  //         // console.log(data?.data);
-  //         dispatch(loadUserInfo(data?.data));
-  //       })
-  //       .catch((e) => {
-  //         console.log(e);
-  //         console.log("Error: ", e?.response?.statusText);
-  //         dispatch(signOutReducer());
-  //       })
-  //       .finally(() => {
-  //         dispatch(loadingFinishedReducer("isLoadingUser"));
-  //       });
-  //   }
-  // };
+  const loadCart = async (userId) => {
+    let data = await axiosInstanceToken
+      .get(`/cart/${userId}`)
+      .then((res) => res.data)
+      // return data;
+      .then((data) => {
+        console.log(data?.data?.books);
+        dispatch(loadCartReducer(data?.data?.books));
+      })
+      .catch((e) => {
+        console.log(e);
+        console.log("Error: ", e?.response?.statusText);
+      })
+      .finally(() => {
+        // dispatch(loadingFinishedReducer("isLoadingSignup"));
+      });
+  };
 
   return {
     addToCart,
     RemoveFromCart,
+    loadCart,
   };
 };
 

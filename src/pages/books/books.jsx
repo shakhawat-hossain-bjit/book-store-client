@@ -40,7 +40,7 @@ const Books = () => {
   }, [currentPage, searchedText]);
 
   const selectPageNumber = (page) => {
-    console.log(" clicked page ", page);
+    // console.log(" clicked page ", page);
     setCurrentPage(page);
   };
 

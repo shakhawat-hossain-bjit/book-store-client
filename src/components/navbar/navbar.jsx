@@ -12,10 +12,12 @@ const Navbar = () => {
   const location = useLocation();
   const [userInfo, setUserInfo] = useState({});
   const [search, setSearch] = useState("");
-  const { email, role, userName } = useSelector((state) => state.user);
+  const [cartLength, setCartLength] = useState("");
+  const reduxState = useSelector((state) => state);
+  const { email, role, userName } = reduxState.user;
+  const { books } = reduxState.cart;
   const { checkUser } = userAPI();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,16 +33,29 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    console.log(search, location);
+    // console.log(search, location);
     if (search || location?.pathname == "/books") {
       const timeOutFunc = setTimeout(() => {
         dispatch(searchBookKeywordReducer(search));
         navigate(`/books`);
       }, 1500);
-
       return () => clearTimeout(timeOutFunc);
     }
   }, [search]);
+
+  useEffect(() => {
+    setCartLength(books?.length);
+  }, [books]);
+
+  useEffect(() => {
+    // console.log("location ", location);
+    if ((location.pathname = "/cart")) {
+      const timer = setTimeout(() => {
+        console.log("fetching cart.......................................");
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
 
   return (
     <nav className="nav-container">
@@ -70,13 +85,16 @@ const Navbar = () => {
           </li> */}
           <li>
             <Link to="/wishlist">
-              <SlHeart className="icon" size={22} />
+              <SlHeart className="icon" size={24} />
             </Link>
           </li>
           <li>
-            <Link to="/cart">
-              <SlHandbag className="icon" size={22} />
-            </Link>
+            <div>
+              <Link to="/cart" className="navbar-cart">
+                <p>{cartLength}</p>
+                <SlHandbag className="icon" size={24} />
+              </Link>
+            </div>
           </li>
           {/* <li>
             <Link href="/others">Others</Link>
@@ -96,7 +114,7 @@ const Navbar = () => {
             <li>
               <div className="">
                 <Link to="/login">
-                  <SlUser className="icon" size={22} />
+                  <SlUser className="icon" size={24} />
                 </Link>
               </div>
             </li>
