@@ -13,7 +13,7 @@ const UserRoute = () => {
   // }, [email]);
   // console.log("userInfo ", userInfo);
 
-  return email ? <Outlet /> : <Navigate to="/" />;
+  return role == 2 ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default UserRoute;

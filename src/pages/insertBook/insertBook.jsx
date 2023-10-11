@@ -5,12 +5,8 @@ import useBookHook from "../../hooks/book/useBookHook";
 import { bottomEndToast } from "../../utils/swalCreate";
 
 const InsertBook = () => {
-  const {
-    isLoadingBook,
-    message: bookMessage,
-    success: bookSuccess,
-    createBook,
-  } = useBookHook();
+  const { insertSucccess, insertMessage, isLoadingInsert, createBook } =
+    useBookHook();
 
   const {
     handleSubmit,
@@ -46,17 +42,15 @@ const InsertBook = () => {
     createBook(book);
   };
 
-  useEffect(() => {});
-
   useEffect(() => {
-    if (isLoadingBook == false && bookMessage) {
-      let icon = bookSuccess ? "success" : "error";
+    if (isLoadingInsert == false && insertMessage) {
+      let icon = insertSucccess ? "success" : "error";
       bottomEndToast.fire({
         icon: icon,
-        title: bookMessage,
+        title: insertMessage,
       });
     }
-  }, [isLoadingBook, bookMessage, bookSuccess]);
+  }, [isLoadingInsert, insertMessage, insertSucccess]);
 
   return (
     <div className="insert-product-form">

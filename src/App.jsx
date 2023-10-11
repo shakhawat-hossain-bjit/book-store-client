@@ -21,6 +21,8 @@ import cartAPI from "./api/cart/cartAPI";
 import useCartHook from "./hooks/cart/useCartHook";
 import UpdateBook from "./pages/updateBook/updateBook";
 import InsertBook from "./pages/insertBook/insertBook";
+import Transaction from "./pages/transaction/transaction";
+import BookDetails from "./pages/bookDetails/bookDetails";
 
 function App() {
   const { userId } = useSelector((state) => state.user);
@@ -29,6 +31,13 @@ function App() {
   useEffect(() => {
     if (userId) showCart(userId);
   }, [userId]);
+
+  // useEffect(() => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth",
+  //   });
+  // }, []);
 
   return (
     <>
@@ -43,23 +52,26 @@ function App() {
           {/* <Route path="/cart" element={<Cart />} /> */}
           <Route path="/register" element={<Register />} />
           <Route path="/books" element={<Books />} />
+          <Route path="/book/:id" element={<BookDetails />} />
           <Route path="*" element={<NotFound />} />
 
           <Route path="/dashboard" element={<AdminRoute />}>
             <Route path="book">
+              {/* <Route path="transaction" element={<Books />} /> */}
               <Route path="add" element={<InsertBook />} />
               <Route path="update/:bookId" element={<UpdateBook />} />
+            </Route>
+            <Route path="cart">
+              <Route path="transaction" element={<Transaction />} />
             </Route>
             {/* <Route path="/profile" element={<Profile />}>
               <Route path="edit" element={<EditProfile />} />
               <Route path="delete" element={<DeleteProfile />} />
             </Route> */}
           </Route>
-          <Route
-            //  path="/u"
-            element={<UserRoute />}
-          >
+          <Route path="/user" element={<UserRoute />}>
             <Route path="cart" element={<Cart />} />
+            <Route path="transaction" element={<Transaction />} />
             {/* <Route path="/update-product" element={<UpdateProduct />} />
             <Route path="/delete-product" element={<DeleteProduct />} />
             <Route path="/profile" element={<Profile />}>

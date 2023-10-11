@@ -16,12 +16,8 @@ const BookCard = ({ props }) => {
   const { email, role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    isLoadingBook: bookLoad,
-    message: bookMessage,
-    success: bookSuccess,
-    deleteBookById,
-  } = useBookHook();
+  const { isLoadingDelete, deleteMessage, deleteSuccess, deleteBookById } =
+    useBookHook();
   const { add, message, success, isLoadingCart } = useCartHook();
 
   useEffect(() => {
@@ -64,15 +60,14 @@ const BookCard = ({ props }) => {
   }, [isLoadingCart, message, success]);
 
   useEffect(() => {
-    console.log("books state ", bookMessage, bookLoad);
-    if (bookLoad == false && bookMessage) {
-      let icon = bookSuccess ? "success" : "error";
+    if (isLoadingDelete == false && deleteMessage) {
+      let icon = deleteSuccess ? "success" : "error";
       bottomEndToast.fire({
         icon: icon,
-        title: bookMessage,
+        title: deleteMessage,
       });
     }
-  }, [bookLoad, bookMessage, bookSuccess]);
+  }, [isLoadingDelete, deleteMessage, deleteSuccess]);
 
   const favouriteButton = (e) => {
     console.log("favourite button clicked");
@@ -81,6 +76,7 @@ const BookCard = ({ props }) => {
 
   const cardClicked = () => {
     console.log("card clicked");
+    navigate(`/book/${_id}`);
   };
 
   const bookEditButton = (e) => {
@@ -128,9 +124,9 @@ const BookCard = ({ props }) => {
       </div>
       <div className="book-card-info-container">
         <div className="book-card-info">
-          <p>
-            {title?.length > 18 ? title?.substr(0, 18).concat(" ...") : title}
-          </p>
+          <h5>
+            {title?.length > 22 ? title?.substr(0, 22).concat(" ...") : title}
+          </h5>
           <p>{author}</p>
           <p>{price}</p>
         </div>

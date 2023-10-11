@@ -57,7 +57,7 @@ const Books = () => {
               <Spinner />
             </div>
           ) : (
-            <div>
+            <div className="book-section-cards-container">
               {filteredBooks?.length > 0 ? (
                 <div className="book-section-cards">
                   {filteredBooks?.map((x, index) => (
@@ -65,7 +65,9 @@ const Books = () => {
                   ))}
                 </div>
               ) : (
-                <h3>No Book Found</h3>
+                <div className="not-found-container">
+                  <h3>No Book Found</h3>
+                </div>
               )}
             </div>
           )}

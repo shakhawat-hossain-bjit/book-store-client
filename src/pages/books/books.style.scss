@@ -1,18 +1,25 @@
-.book-section-container{
-    margin-top: 80px;
-    margin-bottom: 80px;
-    .book-section-title{
-        h2{
-            text-align: center;
-            font-size: 35px;
-        } 
+.book-section-container {
+  margin-top: 80px;
+  margin-bottom: 80px;
+  min-height: 1000px;
+  .book-section-title {
+    h2 {
+      text-align: center;
+      font-size: 35px;
     }
-    .book-section-page-container{
-        margin: 40px 0px;
-    }
+  }
+  .book-section-page-container {
+    margin: 40px 0px;
+  }
+  .not-found-container {
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-.book-section-cards{
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+.book-section-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
 }

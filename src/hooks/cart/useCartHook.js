@@ -45,7 +45,7 @@ const useCartHook = () => {
         if (e?.response?.data?.message) {
           txt = e?.response?.data?.message;
         } else {
-          txt = "Failed to log in!";
+          txt = "Failed to add to cart!";
         }
         setSuccess(false);
         setMessage(txt);
@@ -57,22 +57,23 @@ const useCartHook = () => {
   };
 
   const remove = (obj) => {
+    // console.log("hook ", obj);
     setIsLoadingCart(true);
     setMessage("");
     removeFromCart(obj)
       .then((data) => {
-        const { _id, author, title, language, rating, stock, images, price } =
-          data?.data?.currentBook;
-        // dispatch(removeFromCartReducer(_id));
+        // console.log("res ", data);
         setSuccess(true);
         setMessage("successfully Removed From cart");
+        dispatch(removeFromCartReducer(data?.data?.currentBook));
       })
       .catch((e) => {
+        console.log(e);
         let txt = "";
         if (e?.response?.data?.message) {
           txt = e?.response?.data?.message;
         } else {
-          txt = "Failed to log in!";
+          txt = "Failed to remove from cart";
         }
         setSuccess(false);
         setMessage(txt);
@@ -89,7 +90,7 @@ const useCartHook = () => {
     loadCart(userId)
       .then((data) => {
         // console.log(data?.data?.books);
-        dispatch(loadCartReducer(data?.data?.books));
+        dispatch(loadCartReducer(data?.data));
         setMessage("successfully loaded cart");
         setSuccess(true);
       })

@@ -3,27 +3,76 @@ import "./cart.style.scss";
 import { useSelector } from "react-redux";
 import CartItem from "./cartItem/cartItem";
 
+import useTransactiontHook from "../../hooks/transaction/useTransactionHook";
+import { bottomEndToast } from "../../utils/swalCreate";
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
-  let { books } = useSelector((x) => x.cart);
+  const [totalPrice, setTotalPrice] = useState(0);
+  let { books, total } = useSelector((x) => x.cart);
+  let { userId } = useSelector((x) => x.user);
+
+  const {
+    checkOutByUser,
+    isLoadingCheckout,
+    checkoutMessage,
+    checkoutSuccess,
+  } = useTransactiontHook();
 
   useEffect(() => {
+    // console.log(books);
     setCartItems(books);
-  }, [books]);
+    setTotalPrice(total);
+  }, [books, total]);
 
-  // console.log("cartItems ", cartItems);
+  // console.log("cartItems ", cartItems.length);
+
+  const checkOutCart = () => {
+    console.log("checkout");
+    if (userId) checkOutByUser({ userId });
+  };
+
+  useEffect(() => {
+    if (isLoadingCheckout == false && checkoutMessage) {
+      let icon = checkoutSuccess ? "success" : "error";
+      bottomEndToast.fire({
+        icon: icon,
+        title: checkoutMessage,
+      });
+    }
+  }, [isLoadingCheckout, checkoutMessage, checkoutSuccess]);
+
+  // console.log(isLoadingCheckout);
 
   return (
     <div>
       <div className="container">
         <div className=" cart-container">
           <h1 className="cart-title">Cart</h1>
-          <div className="cart-item-container">
-            <hr />
-            {cartItems?.map((x) => (
-              <CartItem props={x} key={x?.book?.id} />
-            ))}
-          </div>
+          <hr />
+          {cartItems?.length == 0 ? (
+            <div className="cart-empty-message">
+              <h3>There is no item</h3>
+            </div>
+          ) : (
+            <div className="cart-item-container">
+              {cartItems?.map((x) => (
+                <CartItem props={x} key={x?.book?.id} />
+              ))}
+              <div className="tota-price">
+                <h3>{totalPrice}</h3>
+              </div>
+
+              <div className="checkout-button-container">
+                <button
+                  onClick={() => checkOutCart()}
+                  disabled={isLoadingCheckout ? true : false}
+                >
+                  Check Out
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

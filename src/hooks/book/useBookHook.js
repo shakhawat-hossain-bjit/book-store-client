@@ -23,7 +23,17 @@ const useBookHook = () => {
   const [isLoadingBook, setIsLoadingBook] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const [loader, setLoader] = useState(false);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState(false);
+  const [updateSucccess, setUpdateSucccess] = useState(false);
+
+  const [isLoadingInsert, setIsLoadingInsert] = useState(false);
+  const [insertMessage, setInsertMessage] = useState(false);
+  const [insertSucccess, setInsertSucccess] = useState(false);
+
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -190,14 +200,13 @@ const useBookHook = () => {
   };
 
   const deleteBookById = (bookId) => {
-    setIsLoadingBook(true);
-    setMessage("");
+    setIsLoadingDelete(true);
+    setDeleteMessage("");
     deleteBook(bookId)
       .then((data) => {
-        console.log(data);
-        setMessage(data?.message);
-        setIsLoadingBook(false);
-        setSuccess(true);
+        // console.log(data);
+        setDeleteMessage(data?.message);
+        setDeleteSuccess(true);
         dispatch(removeBookReducer(bookId));
       })
       .catch((e) => {
@@ -208,24 +217,22 @@ const useBookHook = () => {
         } else {
           message = "Failed to load!";
         }
-        setSuccess(false);
-        setMessage(message);
+        setDeleteSuccess(false);
+        setDeleteMessage(message);
       })
       .finally(() => {
-        setIsLoadingBook(false);
-        dispatch(lodingFinishedReducer("isLoadingBook"));
+        setIsLoadingDelete(false);
       });
   };
 
   const createBook = (book) => {
-    setIsLoadingBook(true);
+    setIsLoadingInsert(true);
     setMessage("");
     insertBook(book)
       .then((data) => {
         //  console.log(data);
-        setMessage(data?.message);
-        setIsLoadingBook(false);
-        setSuccess(true);
+        setInsertMessage(data?.message);
+        setInsertSucccess(true);
         // dispatch(removeBookReducer(bookId));
       })
       .catch((e) => {
@@ -235,24 +242,22 @@ const useBookHook = () => {
         } else {
           message = "Failed to insert!";
         }
-        setSuccess(false);
-        setMessage(message);
+        setInsertSucccess(false);
+        setInsertMessage(message);
       })
       .finally(() => {
-        setIsLoadingBook(false);
-        // dispatch(lodingFinishedReducer("isLoadingBook"));
+        setIsLoadingInsert(false);
       });
   };
 
   const updateBookById = (book) => {
-    setIsLoadingBook(true);
-    setMessage("");
+    setIsLoadingUpdate(true);
+    setUpdateMessage("");
     updateBook(book)
       .then((data) => {
-        console.log(data);
-        setMessage(data?.message);
-        setIsLoadingBook(false);
-        setSuccess(true);
+        // console.log(data);
+        setUpdateMessage(data?.message);
+        setUpdateSucccess(true);
         // dispatch(removeBookReducer(bookId));
       })
       .catch((e) => {
@@ -262,12 +267,11 @@ const useBookHook = () => {
         } else {
           message = "Failed to update!";
         }
-        setSuccess(false);
-        setMessage(message);
+        setUpdateSucccess(false);
+        setUpdateMessage(message);
       })
       .finally(() => {
-        setIsLoadingBook(false);
-        // dispatch(lodingFinishedReducer("isLoadingBook"));
+        setIsLoadingUpdate(false);
       });
   };
 
@@ -291,11 +295,19 @@ const useBookHook = () => {
     getBookById,
 
     deleteBookById,
-    updateBookById,
-    createBook,
+    isLoadingDelete,
+    deleteMessage,
+    deleteSuccess,
 
-    setLoader,
-    loader,
+    updateBookById,
+    isLoadingUpdate,
+    updateMessage,
+    updateSucccess,
+
+    createBook,
+    isLoadingInsert,
+    insertMessage,
+    insertSucccess,
   };
 };
 

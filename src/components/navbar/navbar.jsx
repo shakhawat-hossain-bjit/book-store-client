@@ -86,18 +86,22 @@ const Navbar = () => {
             <Link to="/books">Books</Link>
           </li>
           <li>
-            <Link to="/wishlist">
-              <SlHeart className="icon" size={24} />
-            </Link>
+            {userInfo.role == 2 && (
+              <Link to="/wishlist">
+                <SlHeart className="icon" size={24} />
+              </Link>
+            )}
           </li>
           <li>
-            <div>
-              <Link to="/cart" className="navbar-cart">
-                {cartLength > 0 && <p>{cartLength}</p>}
+            {userInfo.role == 2 && (
+              <div>
+                <Link to="/user/cart" className="navbar-cart">
+                  {cartLength > 0 && <p>{cartLength}</p>}
 
-                <SlHandbag className="icon" size={24} />
-              </Link>
-            </div>
+                  <SlHandbag className="icon" size={24} />
+                </Link>
+              </div>
+            )}
           </li>
           <li
             className="profile-section"
@@ -126,6 +130,18 @@ const Navbar = () => {
                 {userInfo?.role == 1 && (
                   <div>
                     <Link to="/dashboard/book/add">Insert Product</Link>
+                  </div>
+                )}
+
+                {userInfo?.role == 1 && (
+                  <div>
+                    <Link to="/dashboard/cart/transaction">Transactions</Link>
+                  </div>
+                )}
+
+                {userInfo?.role == 2 && (
+                  <div>
+                    <Link to="/user/transaction">My Transaction</Link>
                   </div>
                 )}
 

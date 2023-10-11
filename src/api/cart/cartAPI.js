@@ -15,6 +15,7 @@ const cartAPI = () => {
   };
 
   const removeFromCart = async (obj) => {
+    // console.log("cart api ", obj);
     let data = await axiosInstanceToken
       .patch(`/cart/remove-book`, obj)
       .then((res) => res.data);
@@ -46,7 +47,7 @@ const cartAPI = () => {
     //   console.log("Error: ", e?.response?.statusText);
     // })
     // .finally(() => {
-    //
+    //   // dispatch(loadingFinishedReducer("isLoadingSignup"));
     // });
   };
 

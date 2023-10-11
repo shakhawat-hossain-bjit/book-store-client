@@ -5,6 +5,7 @@ const initialState = {
   isLoadingCart: false,
   isLoadingAdd: false,
   isLoadingRemove: false,
+  total: 0,
 };
 
 const cartSlice = createSlice({
@@ -13,7 +14,8 @@ const cartSlice = createSlice({
   reducers: {
     loadCartReducer: (state, action) => {
       state.isLoadingCart = true;
-      state.books = action.payload;
+      state.books = action.payload?.books;
+      state.total = action.payload?.totalPrice;
     },
     addToCartReducer: (state, action) => {
       // state.isLoadingAdd = true;
@@ -41,13 +43,14 @@ const cartSlice = createSlice({
       }
       // console.log("mappedBooks ", mappedBooks);
       state.books = mappedBooks;
+      state.total = Number(state.total + obj.price);
     },
 
     removeFromCartReducer: (state, action) => {
       // state.isLoadingRemove = true;
-      // console.log("reducer ", action?.payload);
+      console.log("reducer ", action?.payload);
       const mappedBooks = state?.books?.filter((x) => {
-        if (x.book._id != action?.payload) {
+        if (x.book._id != action?.payload?._id) {
           return x;
         } else {
           if (x.quantity > 1) {
@@ -56,8 +59,9 @@ const cartSlice = createSlice({
           }
         }
       });
-      // console.log("mappedBooks ", mappedBooks);
+      console.log("mappedBooks ", mappedBooks);
       state.books = mappedBooks;
+      state.total = Number((state.total - action?.payload?.price).toFixed(2));
     },
 
     lodingFinishedReducer: (state, action) => {

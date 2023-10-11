@@ -70,6 +70,7 @@ const CartItem = ({ props }) => {
         bookId: _id,
         amount: 1,
       };
+      console.log("obj ", obj);
       remove(obj);
     } else {
       navigate("/login");
@@ -124,7 +125,7 @@ const CartItem = ({ props }) => {
       </div>
 
       <div className="cart-item-sub-total-container">
-        <p className="cart-item-sub-total">{price * quantity}</p>
+        <p className="cart-item-sub-total">{(price * quantity).toFixed(2)}</p>
       </div>
     </div>
   );

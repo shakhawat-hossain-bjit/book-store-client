@@ -32,10 +32,10 @@ const UpdateBook = () => {
   const {
     getBookById,
     book,
-    isLoadingBook,
     updateBookById,
-    message: bookMessage,
-    success: bookSuccess,
+    updateSucccess,
+    isLoadingUpdate,
+    updateMessage,
   } = useBookHook();
 
   useEffect(() => {
@@ -69,17 +69,30 @@ const UpdateBook = () => {
     updateBookById(book);
   };
 
-  console.log("bookMessage ", bookMessage);
+  // console.log("bookMessage ", bookMessage);
 
   useEffect(() => {
-    if (isLoadingBook == false && bookMessage) {
-      let icon = bookSuccess ? "success" : "error";
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (isLoadingUpdate == false && updateMessage) {
+      let icon = updateSucccess ? "success" : "error";
       bottomEndToast.fire({
         icon: icon,
-        title: bookMessage,
+        title: updateMessage,
       });
     }
-  }, [isLoadingBook, bookMessage, bookSuccess]);
+    if (updateSucccess) {
+      setValue("title", "");
+      setValue("author", "");
+      setValue("price", "");
+      setValue("stock", "");
+      setValue("pages", "");
+      setValue("year", "");
+      setValue("language", "");
+    }
+  }, [isLoadingUpdate, updateMessage, updateSucccess]);
 
   return (
     <div className="update-product-form">
@@ -100,8 +113,8 @@ const UpdateBook = () => {
                   message: "Minimum length is 5",
                 },
                 maxLength: {
-                  value: 20,
-                  message: "Maximum length is 20",
+                  value: 50,
+                  message: "Maximum length is 50",
                 },
               }}
               render={({ field }) => (
