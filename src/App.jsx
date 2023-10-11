@@ -19,6 +19,8 @@ import Books from "./pages/books/books";
 import { useSelector } from "react-redux";
 import cartAPI from "./api/cart/cartAPI";
 import useCartHook from "./hooks/cart/useCartHook";
+import UpdateBook from "./pages/updateBook/updateBook";
+import InsertBook from "./pages/insertBook/insertBook";
 
 function App() {
   const { userId } = useSelector((state) => state.user);
@@ -43,11 +45,11 @@ function App() {
           <Route path="/books" element={<Books />} />
           <Route path="*" element={<NotFound />} />
 
-          <Route path="/admin" element={<AdminRoute />}>
-            {/* <Route path="/book">
-              <Route path="/add" element={<InsertProduct />} />
-              <Route path="/update" element={<UpdateProduct />} />
-            </Route> */}
+          <Route path="/dashboard" element={<AdminRoute />}>
+            <Route path="book">
+              <Route path="add" element={<InsertBook />} />
+              <Route path="update/:bookId" element={<UpdateBook />} />
+            </Route>
             {/* <Route path="/profile" element={<Profile />}>
               <Route path="edit" element={<EditProfile />} />
               <Route path="delete" element={<DeleteProfile />} />

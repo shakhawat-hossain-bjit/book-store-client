@@ -17,7 +17,7 @@ const BookCard = ({ props }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
-    isLoadingBook,
+    isLoadingBook: bookLoad,
     message: bookMessage,
     success: bookSuccess,
     deleteBookById,
@@ -64,14 +64,15 @@ const BookCard = ({ props }) => {
   }, [isLoadingCart, message, success]);
 
   useEffect(() => {
-    if (isLoadingBook == false && bookMessage) {
+    console.log("books state ", bookMessage, bookLoad);
+    if (bookLoad == false && bookMessage) {
       let icon = bookSuccess ? "success" : "error";
       bottomEndToast.fire({
         icon: icon,
         title: bookMessage,
       });
     }
-  }, [isLoadingBook, bookMessage, bookSuccess]);
+  }, [bookLoad, bookMessage, bookSuccess]);
 
   const favouriteButton = (e) => {
     console.log("favourite button clicked");
@@ -82,9 +83,9 @@ const BookCard = ({ props }) => {
     console.log("card clicked");
   };
 
-  const bookEditButton = () => {
+  const bookEditButton = (e) => {
     e.stopPropagation();
-    navigate("/admin/update-book");
+    navigate(`/dashboard/book/update/${_id}`);
   };
 
   const cartButton = (e) => {

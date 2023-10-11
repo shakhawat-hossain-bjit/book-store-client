@@ -122,9 +122,17 @@ const Navbar = () => {
           >
             {userInfo.email ? (
               <div className="options">
-                <Link to="/" onClick={() => logOutUser()}>
-                  Log Out
-                </Link>
+                {userInfo?.role == 1 && (
+                  <div>
+                    <Link to="/dashboard/book/add">Insert Product</Link>
+                  </div>
+                )}
+
+                <div>
+                  <Link to="/" onClick={() => logOutUser()}>
+                    Log Out
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="options">

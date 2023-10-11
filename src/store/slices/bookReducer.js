@@ -23,10 +23,18 @@ const bookSlice = createSlice({
       state.isLoadingBook = true;
       state.books = action.payload;
     },
-    // removeBookReducer: (state, action) => {
-    //   state.isLoadingBook = true;
-    //   state.books = action.payload;
-    // },
+    removeBookReducer: (state, action) => {
+      state.isLoadingBook = true;
+      // console.log("state?.books?.books ", state?.books?.books);
+      // console.log("state?.books ", state?.books);
+      const filtered = state?.books?.filter((x) => {
+        if (x._id != action?.payload) {
+          return x;
+        }
+      });
+      // console.log("filtered ", filtered);
+      state.books = filtered;
+    },
     loadAllBookReducer: (state, action) => {
       state.isLoadingAllBook = true;
       state.allBooks = action.payload;
@@ -84,6 +92,7 @@ export const {
   loadBooksByViewDescReducer,
   searchBookKeywordReducer,
   loadBookReducer,
+  removeBookReducer,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

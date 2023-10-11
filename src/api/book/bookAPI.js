@@ -82,6 +82,21 @@ const bookAPI = () => {
     //  });
   };
 
+  const insertBook = async (book) => {
+    let data = await axiosInstanceToken
+      .post(`/books/create`, book)
+      .then((res) => res.data);
+    return data;
+  };
+
+  const updateBook = async (book) => {
+    const { id, ...other } = book;
+    let data = await axiosInstanceToken
+      .patch(`/books/update/${id}`, other)
+      .then((res) => res.data);
+    return data;
+  };
+
   const deleteBook = async (bookId) => {
     let data = await axiosInstanceToken
       .delete(`/books/delete/${bookId}`)
@@ -96,6 +111,8 @@ const bookAPI = () => {
     getBooksByPriceAsc,
     getBooksByViewDesc,
     getSearchedBook,
+    insertBook,
+    updateBook,
     deleteBook,
   };
 };

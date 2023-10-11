@@ -13,9 +13,8 @@ const Books = () => {
   const [pages, setPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const { searchKeyWord } = useSelector((state) => state.books);
-  const { getSearchedBook } = bookAPI();
-  const { getSearched, searchedbooks } = useBookHook();
+  const { searchKeyWord, books } = useSelector((state) => state.books);
+  const { getSearched, searchedbooks, isLoadingBook, success } = useBookHook();
 
   useEffect(() => {
     setSearchedText(searchKeyWord);
@@ -32,13 +31,14 @@ const Books = () => {
   }, [currentPage, searchedText]);
 
   useEffect(() => {
-    // console.log("dfsssssssssssss ", searchedbooks);
-    setFilteredBooks(searchedbooks?.books);
+    // console.log("booooooooks obj ", searchedbooks);
+    // setFilteredBooks(searchedbooks?.books);
+    setFilteredBooks(books);
     setPages(
       Math.ceil(searchedbooks?.filteredBookCount / searchedbooks?.limit)
     );
-    setIsLoading(false);
-  }, [searchedbooks]);
+    setIsLoading(isLoadingBook);
+  }, [searchedbooks, books, isLoadingBook]);
 
   const selectPageNumber = (page) => {
     // console.log(" clicked page ", page);

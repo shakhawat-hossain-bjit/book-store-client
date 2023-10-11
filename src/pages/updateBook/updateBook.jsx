@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from "react";
-import "./updateProduct.style.css";
+import "./updateBook.style.css";
 import { Controller, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import bookAPI from "../../api/book/bookAPI";
-import Spinner from "../../components/spinner/spinner";
-const UpdateProduct = () => {
-  const [productId, setProductId] = useState("");
-  const [id, setId] = useState("");
-  const [foundProduct, setFoundProduct] = useState(0);
+import useBookHook from "../../hooks/book/useBookHook";
+
+const UpdateBook = () => {
+  const { bookId } = useParams();
+  const { getBookById, book, isLoadingBook } = useBookHook();
+
+  useEffect(() => {
+    getBookById(bookId);
+  }, [bookId]);
+
+  useEffect(() => {
+    setValue("title", product?.title);
+    setValue("price", product?.price);
+    setValue("stock", product?.stock);
+    setValue("rating", product?.rating);
+    setValue("description", product?.description);
+  }, [book]);
 
   const {
     handleSubmit,
@@ -33,34 +46,6 @@ const UpdateProduct = () => {
     updateProduct,
   } = bookAPI();
 
-  const getProduct = (e) => {
-    setFoundProduct(0);
-    e.preventDefault();
-    if (productId) {
-      getProductById(productId);
-    } else alert("Product Id is not provided");
-  };
-
-  useEffect(() => {
-    setId(product?._id);
-    setValue("title", product?.title);
-    setValue("price", product?.price);
-    setValue("stock", product?.stock);
-    setValue("rating", product?.rating);
-    setValue("description", product?.description);
-    // console.log(product);
-  }, [product]);
-
-  //   console.log(product);
-  // const handleUpdateProduct = (e) => {
-  //   console.log("Update Clicked");
-  //   e.preventDefault();
-  //   const product = { id, title, price, stock, rating, description };
-  //   console.log("product ", product);
-  //   updateProduct(product);
-  //   setProduct({});
-  // };
-
   const handleOnUpdate = (data) => {
     const product = {
       id: id,
@@ -70,29 +55,13 @@ const UpdateProduct = () => {
       rating: getValues("rating"),
       description: getValues("description"),
     };
-    console.log("ppp ", product);
-    updateProduct(product);
+
+    // updateProduct(product);
     setProduct({});
   };
 
   return (
     <div className="update-product-form">
-      <form onSubmit={getProduct}>
-        <h2>Update Product</h2>
-        <div>
-          <label htmlFor="id">Product Id:</label>
-          <input
-            type="text"
-            id="id"
-            name="id"
-            required
-            onKeyUp={(e) => setProductId(e.target.value)}
-            // disabled={`${foundProduct == 1 ? "true" : "false"}`}
-            // disabled={`${foundProduct}`}
-          />
-          <input type="submit" value="Search" />
-        </div>
-      </form>
       {isLoadingProduct ? (
         <Spinner />
       ) : (
@@ -100,6 +69,7 @@ const UpdateProduct = () => {
           <form onSubmit={handleSubmit(handleOnUpdate)}>
             <div>
               <div>
+                <h2>{bookId}</h2>
                 <label htmlFor="title">Title:</label>
                 <Controller
                   name="title"
@@ -258,4 +228,4 @@ const UpdateProduct = () => {
   );
 };
 
-export default UpdateProduct;
+export default UpdateBook;

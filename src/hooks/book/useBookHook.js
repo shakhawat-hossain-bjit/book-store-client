@@ -7,6 +7,7 @@ import {
   loadBooksByPriceAscReducer,
   loadBooksByViewDescReducer,
   lodingFinishedReducer,
+  removeBookReducer,
 } from "../../store/slices/bookReducer";
 import { useDispatch } from "react-redux";
 
@@ -34,6 +35,8 @@ const useBookHook = () => {
     getBooksByPriceAsc,
     getBooksByViewDesc,
     deleteBook,
+    updateBook,
+    insertBook,
   } = bookAPI();
 
   const getBookById = (_id) => {
@@ -97,6 +100,12 @@ const useBookHook = () => {
         dispatch(loadBookReducer(data?.data?.books));
       })
       .catch((e) => {
+        // console.log("inside error", e);
+        if (e?.response?.status == 404) {
+          setSearchedbooks({});
+          dispatch(loadBookReducer({}));
+        }
+
         let message = "";
         if (e?.response?.data?.message) {
           message = e?.response?.data?.message;
@@ -185,12 +194,14 @@ const useBookHook = () => {
     setMessage("");
     deleteBook(bookId)
       .then((data) => {
-        // console.log(data);
-        setBook(data?.data?.books);
+        console.log(data);
         setMessage(data?.message);
+        setIsLoadingBook(false);
         setSuccess(true);
+        dispatch(removeBookReducer(bookId));
       })
       .catch((e) => {
+        // console.log("error   -- ", e);
         let message = "";
         if (e?.response?.data?.message) {
           message = e?.response?.data?.message;
@@ -202,53 +213,61 @@ const useBookHook = () => {
       })
       .finally(() => {
         setIsLoadingBook(false);
+        dispatch(lodingFinishedReducer("isLoadingBook"));
       });
   };
 
-  const insertProduct = (product) => {
+  const createBook = (book) => {
     setIsLoadingBook(true);
-    fetch(`http://localhost:8000/products/insert`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(product),
-    })
-      .then((res) => res.json())
+    setMessage("");
+    insertBook(book)
       .then((data) => {
+        //  console.log(data);
+        setMessage(data?.message);
         setIsLoadingBook(false);
-        if (data?.success) {
-          alert(data?.message);
+        setSuccess(true);
+        // dispatch(removeBookReducer(bookId));
+      })
+      .catch((e) => {
+        let message = "";
+        if (e?.response?.data?.message) {
+          message = e?.response?.data?.message;
         } else {
-          alert(data?.message);
+          message = "Failed to insert!";
         }
+        setSuccess(false);
+        setMessage(message);
       })
       .finally(() => {
         setIsLoadingBook(false);
+        // dispatch(lodingFinishedReducer("isLoadingBook"));
       });
   };
 
-  const updateProduct = (product) => {
+  const updateBookById = (book) => {
     setIsLoadingBook(true);
-    const { id, ...other } = product;
-    fetch(`http://localhost:8000/products/update/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(other),
-    })
-      .then((res) => res.json())
+    setMessage("");
+    updateBook(book)
       .then((data) => {
+        console.log(data);
+        setMessage(data?.message);
         setIsLoadingBook(false);
-        if (data?.success) {
-          alert(data?.message);
+        setSuccess(true);
+        // dispatch(removeBookReducer(bookId));
+      })
+      .catch((e) => {
+        let message = "";
+        if (e?.response?.data?.message) {
+          message = e?.response?.data?.message;
         } else {
-          alert(data?.message);
+          message = "Failed to update!";
         }
+        setSuccess(false);
+        setMessage(message);
       })
       .finally(() => {
         setIsLoadingBook(false);
+        // dispatch(lodingFinishedReducer("isLoadingBook"));
       });
   };
 
@@ -271,9 +290,8 @@ const useBookHook = () => {
     getBookById,
 
     deleteBookById,
-
-    insertProduct,
-    updateProduct,
+    updateBookById,
+    createBook,
   };
 };
 
