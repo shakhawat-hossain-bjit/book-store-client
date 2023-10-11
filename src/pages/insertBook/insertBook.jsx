@@ -46,6 +46,8 @@ const InsertBook = () => {
     createBook(book);
   };
 
+  useEffect(() => {});
+
   useEffect(() => {
     if (isLoadingBook == false && bookMessage) {
       let icon = bookSuccess ? "success" : "error";
@@ -59,7 +61,7 @@ const InsertBook = () => {
   return (
     <div className="insert-product-form">
       <form onSubmit={handleSubmit(handleOnSubmit)}>
-        <h2>Insert Product</h2>
+        <h2>Insert Book</h2>
 
         {/* title */}
         <div>
@@ -102,8 +104,8 @@ const InsertBook = () => {
             rules={{
               required: "author is required",
               maxLength: {
-                value: 20,
-                message: "maximum length must be 20",
+                value: 50,
+                message: "maximum length must be 50",
               },
             }}
             render={({ field }) => (

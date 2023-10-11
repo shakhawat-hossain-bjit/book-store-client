@@ -135,22 +135,7 @@ const BookCard = ({ props }) => {
           <p>{price}</p>
         </div>
 
-        {role == 2 ? (
-          <div className="book-card-cart">
-            <button
-              className="book-card-cart-button"
-              onClick={(e) => cartButton(e)}
-            >
-              Add to Cart
-            </button>
-            <button
-              className="book-card-favourite-button"
-              onClick={(e) => favouriteButton(e)}
-            >
-              <SlHeart />
-            </button>
-          </div>
-        ) : (
+        {role == 1 ? (
           <div className="book-card-cart">
             <button
               className="book-card-cart-button"
@@ -163,6 +148,21 @@ const BookCard = ({ props }) => {
               onClick={(e) => bookDeleteButton(e)}
             >
               <MdDelete />
+            </button>
+          </div>
+        ) : (
+          <div className="book-card-cart">
+            <button
+              className="book-card-cart-button"
+              onClick={(e) => cartButton(e)}
+            >
+              Add to Cart
+            </button>
+            <button
+              className="book-card-favourite-button"
+              onClick={(e) => favouriteButton(e)}
+            >
+              <SlHeart />
             </button>
           </div>
         )}

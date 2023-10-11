@@ -23,9 +23,9 @@ const useBookHook = () => {
   const [isLoadingBook, setIsLoadingBook] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const dispatch = useDispatch();
+  const [loader, setLoader] = useState(false);
 
-  const [product, setProduct] = useState({});
+  const dispatch = useDispatch();
 
   const {
     findBook,
@@ -42,11 +42,11 @@ const useBookHook = () => {
   const getBookById = (_id) => {
     setIsLoadingBook(true);
     setMessage("");
-    findBook()
+    findBook(_id)
       .then((data) => {
-        // console.log(data?.data?.books);
-        setBook(data?.data?.books);
-        setMessage(data?.data?.message);
+        console.log(data);
+        setBook(data?.data);
+        setMessage(data?.message);
         setSuccess(true);
       })
       .catch((e) => {
@@ -273,6 +273,7 @@ const useBookHook = () => {
 
   return {
     books,
+    book,
     searchedbooks,
     rateBooks,
     priceBooks,
@@ -292,6 +293,9 @@ const useBookHook = () => {
     deleteBookById,
     updateBookById,
     createBook,
+
+    setLoader,
+    loader,
   };
 };
 

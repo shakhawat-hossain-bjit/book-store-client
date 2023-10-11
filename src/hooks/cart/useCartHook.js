@@ -63,7 +63,7 @@ const useCartHook = () => {
       .then((data) => {
         const { _id, author, title, language, rating, stock, images, price } =
           data?.data?.currentBook;
-        dispatch(removeFromCartReducer(_id));
+        // dispatch(removeFromCartReducer(_id));
         setSuccess(true);
         setMessage("successfully Removed From cart");
       })

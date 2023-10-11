@@ -32,6 +32,7 @@ const Navbar = () => {
 
   const logOutUser = () => {
     dispatch(signOutReducer());
+    navigate("/");
   };
 
   useEffect(() => {
