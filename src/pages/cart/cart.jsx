@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./cart.style.scss";
 import { useSelector } from "react-redux";
 import CartItem from "./cartItem/cartItem";
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   let { books } = useSelector((x) => x.cart);

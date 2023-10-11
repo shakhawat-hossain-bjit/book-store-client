@@ -8,15 +8,16 @@ import {
   removeFromCartReducer,
 } from "../../../store/slices/cartReducer";
 import { useDispatch, useSelector } from "react-redux";
-import cartAPI from "../../../api/cartAPI";
+import cartAPI from "../../../api/cart/cartAPI";
+import useCartHook from "../../../hooks/cart/useCartHook";
+import { bottomEndToast } from "../../../utils/swalCreate";
 
 const CartItem = ({ props }) => {
   const [imageState, setImageState] = useState(0);
   const { price, quantity } = props;
   const { title, images, author, _id } = props.book;
-  const { addToCart, RemoveFromCart } = cartAPI();
+  const { add, remove, message, success, isLoadingCart } = useCartHook();
   const { email, role, userId } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const loadImages = async () => {
@@ -48,64 +49,42 @@ const CartItem = ({ props }) => {
   }, [images]);
 
   const addItem = () => {
-    console.log("add ", _id, title);
+    // console.log("add ", _id, title);
     if (userId) {
       const obj = {
         userId: userId,
         bookId: _id,
         amount: 1,
       };
-      addToCart(obj)
-        .then((data) => {
-          console.log(data?.data);
-          //   setMessage("succssfully added to cart");
-          const { _id, author, title, language, rating, stock, images, price } =
-            data?.data?.currentBook;
-          dispatch(
-            addToCartReducer({
-              _id,
-              author,
-              title,
-              language,
-              rating,
-              stock,
-              images,
-              price,
-            })
-          );
-        })
-        .catch((e) => {
-          console.log(e);
-          // console.log("Error: ", e?.response?.statusText);
-          //   setMessage("Faied to add to cart");
-        });
+      add(obj);
     } else {
       navigate("/login");
     }
   };
 
   const removeItem = () => {
-    console.log("remove ", _id, title);
+    // console.log("remove ", _id, title);
     if (userId) {
       const obj = {
         userId: userId,
         bookId: _id,
         amount: 1,
       };
-      RemoveFromCart(obj)
-        .then((data) => {
-          console.log(data?.data);
-          dispatch(removeFromCartReducer(_id));
-        })
-        .catch((e) => {
-          console.log(e);
-          // console.log("Error: ", e?.response?.statusText);
-          //   setMessage("Faied to add to cart");
-        });
+      remove(obj);
     } else {
       navigate("/login");
     }
   };
+
+  useEffect(() => {
+    if (isLoadingCart == false && message) {
+      let icon = success ? "success" : "error";
+      bottomEndToast.fire({
+        icon: icon,
+        title: message,
+      });
+    }
+  }, [isLoadingCart, message, success]);
 
   return (
     <div className="cart-item-info">

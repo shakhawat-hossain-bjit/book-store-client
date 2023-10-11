@@ -17,14 +17,15 @@ import AdminRoute from "./pages/authenticate/adminRoute";
 import UserRoute from "./pages/authenticate/userRoute";
 import Books from "./pages/books/books";
 import { useSelector } from "react-redux";
-import cartAPI from "./api/cartAPI";
+import cartAPI from "./api/cart/cartAPI";
+import useCartHook from "./hooks/cart/useCartHook";
 
 function App() {
   const { userId } = useSelector((state) => state.user);
-  const { loadCart } = cartAPI();
+  const { showCart } = useCartHook();
 
   useEffect(() => {
-    if (userId) loadCart(userId);
+    if (userId) showCart(userId);
   }, [userId]);
 
   return (

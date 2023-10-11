@@ -3,32 +3,25 @@ import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import "./bestSelling.style.scss";
 import BookCard from "../card/bookCard/bookCard";
 import { useSelector } from "react-redux";
-import bookGetAPI from "../../api/book/bookGetAPI";
+import bookAPI from "../../api/book/bookAPI";
 import Spinner from "../spinner/spinner";
+import useBookHook from "../../hooks/book/useBookHook";
 
 const BestSelling = () => {
-  const [books, setBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [visibleBooks, setVisibleBooks] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
   let limit = 5;
-  const { getAllBooks } = bookGetAPI();
-
-  let { allBooks, isLoadingAllBook } = useSelector((state) => state.books);
+  const { books, isLoading, getAll } = useBookHook();
 
   useEffect(() => {
-    setIsLoading(isLoadingAllBook);
-  }, [isLoadingAllBook]);
-
-  useEffect(() => {
-    setBooks(allBooks);
-  }, [allBooks]);
-
-  useEffect(() => {
-    if (books.length == 0) {
-      getAllBooks();
-    }
+    getAll();
   }, []);
+
+  // useEffect(() => {
+  //   if (books.length == 0) {
+  //     getAllBooks();
+  //   }
+  // }, []);
 
   useEffect(() => {
     let slicedBooks = books?.slice(startIndex, startIndex + limit);
@@ -47,7 +40,6 @@ const BestSelling = () => {
 
   // console.log(startIndex);
   // console.log("currentIndex ", currentIndex);
-
   // console.log(isLoading, books);
 
   return (

@@ -2,21 +2,28 @@ import React, { useEffect, useState } from "react";
 import NavSections from "../navSections/navSections";
 import "./featuredBooks.style.scss";
 import BookCard from "../card/bookCard/bookCard";
-import bookGetAPI from "../../api/book/bookGetAPI";
-import { useSelector } from "react-redux";
+import bookAPI from "../../api/book/bookAPI";
+import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../spinner/spinner";
+import useBookHook from "../../hooks/book/useBookHook";
 
 const FeaturedBooks = () => {
   const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedSection, setSelectedSection] = useState(0);
-  const { getBooksByPriceAsc, getBooksByRatingDesc, getBooksByViewDesc } =
-    bookGetAPI();
+  const dispatch = useDispatch();
+  const {
+    getBooksByPrice,
+    priceBooks,
+    getBooksByRating,
+    rateBooks,
+    getBooksByView,
+    viewBooks,
+  } = useBookHook();
   const sectionName = ["featured", "on sale", "most viewed"];
   const userSelectedSection = (index) => {
     setSelectedSection(index);
   };
-  // console.log(selectedSection);
 
   let {
     booksByRatingDesc,
@@ -52,11 +59,11 @@ const FeaturedBooks = () => {
 
   useEffect(() => {
     if (selectedSection == 0) {
-      getBooksByRatingDesc();
+      getBooksByRating();
     } else if (selectedSection == 1) {
-      getBooksByPriceAsc();
+      getBooksByPrice();
     } else if (selectedSection == 2) {
-      getBooksByViewDesc();
+      getBooksByView();
     }
   }, [selectedSection]);
 

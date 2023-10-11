@@ -4,26 +4,18 @@ import demobook from "../../../assets/images/demoBook.png";
 import Spinner from "../../spinner/spinner";
 import { SlHeart } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
-import cartAPI from "../../../api/cartAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  addToCartReducer,
-  removeFromCartReducer,
-} from "../../../store/slices/cartReducer";
 import { bottomEndToast } from "../../../utils/swalCreate";
-import bookAPI from "../../../api/book/bookAPI";
+import useCartHook from "../../../hooks/cart/useCartHook";
 
 const BookCard = ({ props }) => {
   const [imageState, setImageState] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const { title, author, price, language, category, _id, images } = props;
   const { email, role, userId } = useSelector((state) => state.user);
-  const { deleteBook } = bookAPI();
   const navigate = useNavigate();
-  const { addToCart } = cartAPI();
   const dispatch = useDispatch();
+  const { add, remove, message, success, isLoadingCart } = useCartHook();
 
   useEffect(() => {
     const loadImages = async () => {
@@ -54,76 +46,20 @@ const BookCard = ({ props }) => {
     }
   }, [images]);
 
+  useEffect(() => {
+    if (isLoadingCart == false && message) {
+      let icon = success ? "success" : "error";
+      bottomEndToast.fire({
+        icon: icon,
+        title: message,
+      });
+    }
+  }, [isLoadingCart, message, success]);
+
   const favouriteButton = (e) => {
     console.log("favourite button clicked");
     e.stopPropagation();
-    // if (userId) {
-    //   const obj = {
-    //     userId: userId,
-    //     bookId: _id,
-    //     amount: 1,
-    //   };
-
-    //   dispatch(removeFromCartReducer(_id));
-    // } else {
-    //   navigate("/login");
-    // }
   };
-
-  // const BookCard = (e) => {
-  //   // console.log("cart button clicked ", _id);
-  //   e.stopPropagation();
-  //   setIsLoading(true);
-  //   if (userId) {
-  //     const obj = {
-  //       userId: userId,
-  //       bookId: _id,
-  //       amount: 1,
-  //     };
-  //     // console.log("first ", obj);
-  //     addToCart(obj)
-  //       .then((data) => {
-  //         // console.log(data?.data);
-  //         const { _id, author, title, language, rating, stock, images, price } =
-  //           data?.data?.currentBook;
-  //         dispatch(
-  //           addToCartReducer({
-  //             _id,
-  //             author,
-  //             title,
-  //             language,
-  //             rating,
-  //             stock,
-  //             images,
-  //             price,
-  //           })
-  //         );
-  //         bottomEndToast.fire({
-  //           icon: "success",
-  //           title: "Successfully added to cart",
-  //         });
-  //       })
-  //       .catch((e) => {
-  //         // console.log(e);
-  //         let message = "";
-  //         if (e?.response?.data?.message) {
-  //           // console.log("Error: ", e?.response?.data?.message);
-  //           message = e?.response?.data?.message;
-  //         } else {
-  //           message = "Failed to log in!";
-  //         }
-  //         bottomEndToast.fire({
-  //           icon: "error",
-  //           title: message,
-  //         });
-  //       })
-  //       .finally(() => {
-  //         setIsLoading(false);
-  //       });
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // };
 
   const cardClicked = () => {
     console.log("card clicked");
@@ -134,7 +70,7 @@ const BookCard = ({ props }) => {
     navigate("/admin/update-book");
   };
 
-  const cartButton = () => {
+  const cartButton = (e) => {
     e.stopPropagation();
     if (userId) {
       const obj = {
@@ -142,49 +78,13 @@ const BookCard = ({ props }) => {
         bookId: _id,
         amount: 1,
       };
-      // console.log("first ", obj);
-      addToCart(_id)
-        .then((data) => {
-          // console.log(data?.data);
-          const { _id, author, title, language, rating, stock, images, price } =
-            data?.data?.currentBook;
-          dispatch(
-            deleteBook({
-              _id,
-              author,
-              title,
-              language,
-              rating,
-              stock,
-              images,
-              price,
-            })
-          );
-          bottomEndToast.fire({
-            icon: "success",
-            title: "Successfully added to cart",
-          });
-          removeFromCartReducer();
-        })
-        .catch((e) => {
-          // console.log(e);
-          let message = "";
-          if (e?.response?.data?.message) {
-            // console.log("Error: ", e?.response?.data?.message);
-            message = e?.response?.data?.message;
-          } else {
-            message = "Failed to log in!";
-          }
-          bottomEndToast.fire({
-            icon: "error",
-            title: message,
-          });
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      add(obj);
+    } else {
+      navigate("/login");
     }
   };
+
+  const bookDeleteButton = () => {};
 
   // console.log(title, imageState);
 

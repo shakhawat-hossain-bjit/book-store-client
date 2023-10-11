@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import { axiosInstance, axiosInstanceToken } from "../utils/axiosCreate";
+import { axiosInstance, axiosInstanceToken } from "../../utils/axiosCreate";
 import { useNavigate } from "react-router";
-import { loadCartReducer } from "../store/slices/cartReducer";
+import { loadCartReducer } from "../../store/slices/cartReducer";
 
 const cartAPI = () => {
   const dispatch = useDispatch();
@@ -12,20 +12,9 @@ const cartAPI = () => {
       .post(`/cart/add-book`, obj)
       .then((res) => res.data);
     return data;
-    //   .then((data) => {
-    //     // console.log(data?.data);
-    //     dispatch(logInReducer(data?.data));
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     console.log("Error: ", e?.response?.statusText);
-    //   })
-    //   .finally(() => {
-    //     dispatch(loadingFinishedReducer("isLoadingLogin"));
-    //   });
   };
 
-  const RemoveFromCart = async (obj) => {
+  const removeFromCart = async (obj) => {
     let data = await axiosInstanceToken
       .patch(`/cart/remove-book`, obj)
       .then((res) => res.data);
@@ -46,24 +35,24 @@ const cartAPI = () => {
   const loadCart = async (userId) => {
     let data = await axiosInstanceToken
       .get(`/cart/${userId}`)
-      .then((res) => res.data)
-      // return data;
-      .then((data) => {
-        console.log(data?.data?.books);
-        dispatch(loadCartReducer(data?.data?.books));
-      })
-      .catch((e) => {
-        console.log(e);
-        console.log("Error: ", e?.response?.statusText);
-      })
-      .finally(() => {
-        // dispatch(loadingFinishedReducer("isLoadingSignup"));
-      });
+      .then((res) => res.data);
+    return data;
+    // .then((data) => {
+    //   console.log(data?.data?.books);
+    //   dispatch(loadCartReducer(data?.data?.books));
+    // })
+    // .catch((e) => {
+    //   console.log(e);
+    //   console.log("Error: ", e?.response?.statusText);
+    // })
+    // .finally(() => {
+    //
+    // });
   };
 
   return {
     addToCart,
-    RemoveFromCart,
+    removeFromCart,
     loadCart,
   };
 };
