@@ -58,17 +58,20 @@ const Books = () => {
             </div>
           ) : (
             <div className="book-section-cards-container">
-              {filteredBooks?.length > 0 ? (
-                <div className="book-section-cards">
-                  {filteredBooks?.map((x, index) => (
-                    <BookCard key={x?._id} props={x} />
-                  ))}
-                </div>
-              ) : (
-                <div className="not-found-container">
-                  <h3>No Book Found</h3>
-                </div>
-              )}
+              <div className="filter-section"></div>
+              <div className="content-section">
+                {filteredBooks?.length > 0 ? (
+                  <div className="book-section-cards">
+                    {filteredBooks?.map((x, index) => (
+                      <BookCard key={x?._id} props={x} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="not-found-container">
+                    <h3>No Book Found</h3>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

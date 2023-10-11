@@ -25,12 +25,12 @@ import Transaction from "./pages/transaction/transaction";
 import BookDetails from "./pages/bookDetails/bookDetails";
 
 function App() {
-  const { userId } = useSelector((state) => state.user);
+  const { userId, role } = useSelector((state) => state.user);
   const { showCart } = useCartHook();
 
   useEffect(() => {
-    if (userId) showCart(userId);
-  }, [userId]);
+    if (userId && role == 2) showCart(userId);
+  }, [userId, role]);
 
   // useEffect(() => {
   //   window.scrollTo({
