@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { bottomEndToast } from "../../../utils/swalCreate";
 import useCartHook from "../../../hooks/cart/useCartHook";
+import useBookHook from "../../../hooks/book/useBookHook";
 
 const BookCard = ({ props }) => {
   const [imageState, setImageState] = useState(0);
@@ -15,7 +16,13 @@ const BookCard = ({ props }) => {
   const { email, role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { add, remove, message, success, isLoadingCart } = useCartHook();
+  const {
+    isLoadingBook,
+    message: bookMessage,
+    success: bookSuccess,
+    deleteBookById,
+  } = useBookHook();
+  const { add, message, success, isLoadingCart } = useCartHook();
 
   useEffect(() => {
     const loadImages = async () => {
@@ -56,6 +63,16 @@ const BookCard = ({ props }) => {
     }
   }, [isLoadingCart, message, success]);
 
+  useEffect(() => {
+    if (isLoadingBook == false && bookMessage) {
+      let icon = bookSuccess ? "success" : "error";
+      bottomEndToast.fire({
+        icon: icon,
+        title: bookMessage,
+      });
+    }
+  }, [isLoadingBook, bookMessage, bookSuccess]);
+
   const favouriteButton = (e) => {
     console.log("favourite button clicked");
     e.stopPropagation();
@@ -84,7 +101,11 @@ const BookCard = ({ props }) => {
     }
   };
 
-  const bookDeleteButton = () => {};
+  const bookDeleteButton = (e) => {
+    console.log("delete Button Clicked");
+    e.stopPropagation();
+    deleteBookById(_id);
+  };
 
   // console.log(title, imageState);
 

@@ -3,6 +3,7 @@ import bookAPI from "../../api/book/bookAPI";
 import {
   loadAllBookReducer,
   loadBookByRatingDescReducer,
+  loadBookReducer,
   loadBooksByPriceAscReducer,
   loadBooksByViewDescReducer,
   lodingFinishedReducer,
@@ -11,7 +12,8 @@ import { useDispatch } from "react-redux";
 
 const useBookHook = () => {
   const [books, setBooks] = useState([]);
-  const [searchedbooks, setSearchedbooks] = useState([]);
+  const [book, setBook] = useState({});
+  const [searchedbooks, setSearchedbooks] = useState({});
   const [rateBooks, setRatebooks] = useState([]);
   const [priceBooks, setPricebooks] = useState([]);
   const [viewBooks, setViewbooks] = useState([]);
@@ -25,12 +27,39 @@ const useBookHook = () => {
   const [product, setProduct] = useState({});
 
   const {
+    findBook,
     getAllBooks,
     getSearchedBook,
     getBooksByRatingDesc,
     getBooksByPriceAsc,
     getBooksByViewDesc,
+    deleteBook,
   } = bookAPI();
+
+  const getBookById = (_id) => {
+    setIsLoadingBook(true);
+    setMessage("");
+    findBook()
+      .then((data) => {
+        // console.log(data?.data?.books);
+        setBook(data?.data?.books);
+        setMessage(data?.data?.message);
+        setSuccess(true);
+      })
+      .catch((e) => {
+        let message = "";
+        if (e?.response?.data?.message) {
+          message = e?.response?.data?.message;
+        } else {
+          message = "Failed to load!";
+        }
+        setSuccess(false);
+        setMessage(message);
+      })
+      .finally(() => {
+        setIsLoadingBook(false);
+      });
+  };
 
   const getAll = () => {
     setIsLoadingBook(true);
@@ -56,13 +85,16 @@ const useBookHook = () => {
       });
   };
 
-  const getSearched = () => {
+  const getSearched = (queryParams) => {
+    console.log("searched");
     setIsLoadingBook(true);
     setMessage("");
-    getSearchedBook()
+
+    getSearchedBook(queryParams)
       .then((data) => {
+        // console.log("hoooook ", data);
         setSearchedbooks(data?.data);
-        dispatch(loadAllBookReducer(data?.data?.books));
+        dispatch(loadBookReducer(data?.data?.books));
       })
       .catch((e) => {
         let message = "";
@@ -148,38 +180,25 @@ const useBookHook = () => {
       });
   };
 
-  const getProductById = (id) => {
+  const deleteBookById = (bookId) => {
     setIsLoadingBook(true);
-    // console.log("begin");
-    fetch(`http://localhost:8000/products/find-by-id/${id}`)
-      .then((res) => res.json())
+    setMessage("");
+    deleteBook(bookId)
       .then((data) => {
-        // console.log("shihab");
-        setIsLoadingBook(false);
-        if (data?.success == false) {
-          alert(data?.message);
-        }
-        if (data?.data) setProduct(data?.data);
-        else setProduct({});
+        // console.log(data);
+        setBook(data?.data?.books);
+        setMessage(data?.message);
+        setSuccess(true);
       })
-      .finally(() => {
-        setIsLoadingBook(false);
-      });
-  };
-
-  const deleteProduct = (id) => {
-    setIsLoadingBook(true);
-    fetch(`http://localhost:8000/products/delete/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setIsLoadingBook(false);
-        if (data?.success) {
-          alert(data?.message);
+      .catch((e) => {
+        let message = "";
+        if (e?.response?.data?.message) {
+          message = e?.response?.data?.message;
         } else {
-          alert(data?.message);
+          message = "Failed to load!";
         }
+        setSuccess(false);
+        setMessage(message);
       })
       .finally(() => {
         setIsLoadingBook(false);
@@ -235,19 +254,25 @@ const useBookHook = () => {
 
   return {
     books,
+    searchedbooks,
     rateBooks,
     priceBooks,
     viewBooks,
+
     isLoadingBook,
+    message,
+    success,
+
     getAll,
     getSearched,
     getBooksByRating,
     getBooksByPrice,
     getBooksByView,
+    getBookById,
+
+    deleteBookById,
 
     insertProduct,
-    deleteProduct,
-    getProductById,
     updateProduct,
   };
 };

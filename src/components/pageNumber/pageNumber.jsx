@@ -50,7 +50,7 @@ const PageNumber = ({ pages, selectPageNumber, currentPage }) => {
     }
   }, [previousButtonRef, pageArr, currentPage]);
 
-  console.log(pageArr);
+  // console.log(pageArr);
 
   return (
     <div className="page-number-container">

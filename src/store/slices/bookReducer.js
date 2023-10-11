@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  books: [],
+  isLoadingBook: false,
   allBooks: [],
   isLoadingAllBook: false,
   booksByRatingDesc: [],
@@ -17,6 +19,14 @@ const bookSlice = createSlice({
   name: "book",
   initialState,
   reducers: {
+    loadBookReducer: (state, action) => {
+      state.isLoadingBook = true;
+      state.books = action.payload;
+    },
+    // removeBookReducer: (state, action) => {
+    //   state.isLoadingBook = true;
+    //   state.books = action.payload;
+    // },
     loadAllBookReducer: (state, action) => {
       state.isLoadingAllBook = true;
       state.allBooks = action.payload;
@@ -73,6 +83,7 @@ export const {
   loadBooksByPriceAscReducer,
   loadBooksByViewDescReducer,
   searchBookKeywordReducer,
+  loadBookReducer,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

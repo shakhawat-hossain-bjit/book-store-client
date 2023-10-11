@@ -5,15 +5,17 @@ import "./books.style.scss";
 import Spinner from "../../components/spinner/spinner";
 import BookCard from "../../components/card/bookCard/bookCard";
 import PageNumber from "../../components/pageNumber/pageNumber";
+import useBookHook from "../../hooks/book/useBookHook";
 
 const Books = () => {
   const [searchedText, setSearchedText] = useState([]);
-  const [searchedBook, setSearchedBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [pages, setPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const { searchKeyWord } = useSelector((state) => state.books);
   const { getSearchedBook } = bookAPI();
+  const { getSearched, searchedbooks } = useBookHook();
 
   useEffect(() => {
     setSearchedText(searchKeyWord);
@@ -22,22 +24,21 @@ const Books = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getSearchedBook(searchKeyWord, currentPage)
-      .then((data) => {
-        setSearchedBooks(data?.data?.books);
-        // console.log(data?.data?.filteredBookCount, data?.data?.limit);
-        setPages(Math.ceil(data?.data?.filteredBookCount / data?.data?.limit));
-      })
-      .catch((e) => {
-        setSearchedBooks([]);
-        setPages(1);
-        // console.log(e);
-        // console.log("Error: ", e?.response?.statusText);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    let queryParams = {};
+    queryParams.text = searchedText;
+    queryParams.page = currentPage;
+
+    getSearched(queryParams);
   }, [currentPage, searchedText]);
+
+  useEffect(() => {
+    // console.log("dfsssssssssssss ", searchedbooks);
+    setFilteredBooks(searchedbooks?.books);
+    setPages(
+      Math.ceil(searchedbooks?.filteredBookCount / searchedbooks?.limit)
+    );
+    setIsLoading(false);
+  }, [searchedbooks]);
 
   const selectPageNumber = (page) => {
     // console.log(" clicked page ", page);
@@ -45,7 +46,7 @@ const Books = () => {
   };
 
   //   console.log(searchedText, currentPage);
-  console.log(searchedBook);
+  // console.log(filteredBooks);
 
   return (
     <div className="container ">
@@ -57,9 +58,9 @@ const Books = () => {
             </div>
           ) : (
             <div>
-              {searchedBook?.length > 0 ? (
+              {filteredBooks?.length > 0 ? (
                 <div className="book-section-cards">
-                  {searchedBook?.map((x, index) => (
+                  {filteredBooks?.map((x, index) => (
                     <BookCard key={x?._id} props={x} />
                   ))}
                 </div>
@@ -70,7 +71,7 @@ const Books = () => {
           )}
         </div>
         <div className="book-section-page-container">
-          {searchedBook?.length > 0 && (
+          {filteredBooks?.length > 0 && (
             <PageNumber
               selectPageNumber={selectPageNumber}
               pages={pages}

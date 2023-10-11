@@ -1,18 +1,32 @@
 import { useDispatch } from "react-redux";
-import { axiosInstance } from "../../utils/axiosCreate";
+import { axiosInstance, axiosInstanceToken } from "../../utils/axiosCreate";
 
 const bookAPI = () => {
   const dispatch = useDispatch();
+
+  const findBook = async (_id) => {
+    let data = await axiosInstance
+      .get(`/books/find-by-id/${_id}`)
+      .then((res) => res.data);
+    return data;
+  };
 
   const getAllBooks = async () => {
     let data = await axiosInstance.get(`/books/all`).then((res) => res.data);
     return data;
   };
 
-  const getSearchedBook = async (search, page) => {
-    const data = await axiosInstance
-      .get(`/books/all?search=${search}&page=${page}`)
-      .then((res) => res.data);
+  const getSearchedBook = async (queryParams) => {
+    // console.log(queryParams);
+    let url = `/books/all?`;
+    if (queryParams?.text) {
+      url += `search=${queryParams?.text}&`;
+    }
+    if (queryParams?.page) {
+      url += `page=${queryParams?.page}&`;
+    }
+
+    const data = await axiosInstance.get(`${url}`).then((res) => res.data);
     return data;
   };
 
@@ -50,6 +64,7 @@ const bookAPI = () => {
     //    dispatch(lodingFinishedReducer("isLoadingBooksByPrice"));
     //  });
   };
+
   const getBooksByViewDesc = async () => {
     let data = await axiosInstance
       .get(`/books/all?sortOrder=asc&sortParam=views`)
@@ -67,12 +82,21 @@ const bookAPI = () => {
     //  });
   };
 
+  const deleteBook = async (bookId) => {
+    let data = await axiosInstanceToken
+      .delete(`/books/delete/${bookId}`)
+      .then((res) => res.data);
+    return data;
+  };
+
   return {
+    findBook,
     getAllBooks,
     getBooksByRatingDesc,
     getBooksByPriceAsc,
     getBooksByViewDesc,
     getSearchedBook,
+    deleteBook,
   };
 };
 
