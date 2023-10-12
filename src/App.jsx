@@ -53,7 +53,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/books" element={<Books />} />
           <Route path="/book/:id" element={<BookDetails />} />
-          <Route path="*" element={<NotFound />} />
 
           <Route path="/dashboard" element={<AdminRoute />}>
             <Route path="book">
@@ -79,6 +78,7 @@ function App() {
               <Route path="delete" element={<DeleteProfile />} />
             </Route> */}
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

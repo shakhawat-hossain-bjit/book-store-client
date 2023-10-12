@@ -6,15 +6,80 @@ import demobook from "../../assets/images/demoBook.png";
 import "./bookDetails.style.scss";
 import Spinner from "../../components/spinner/spinner";
 import RatingStar from "../../components/ratingStart/ratingStar";
+import ReviewCard from "../../components/reviewCard/reviewCard";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { bottomEndToast } from "../../utils/swalCreate";
+import useReviewHook from "../../hooks/review/useReviewHook";
 
 const BookDetails = () => {
+  const [bookDetails, setBookDEtails] = useState({});
+  const [reviews, setReviews] = useState([]);
+  const [myReview, setMyReview] = useState({});
   const { id } = useParams();
-  const { getBookById, book } = useBookHook();
   const [imageState, setImageState] = useState(0);
+  const { email, role, userName, userId } = useSelector((state) => state.user);
+
+  const {
+    getBookById,
+    book,
+    isLoadingBookById,
+    bookByIdMessage,
+    bookByIdSuccess,
+  } = useBookHook();
+
+  const {
+    isLoadingInsert,
+    insertMessage,
+    insertSuccess,
+    insertReview,
+    updateReview,
+    isLoadingUpdate,
+    updateMessage,
+    updateSuccess,
+  } = useReviewHook();
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    getValues,
+    setValue,
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      userName: "",
+      userId: "",
+      bookId: "",
+      content: "",
+      rating: "",
+    },
+  });
+
+  useEffect(() => {
+    setBookDEtails(book);
+    let pos = book?.reviews?.findIndex((x) => {
+      // console.log(x?.userId, userId);
+      if (x?.userId == userId) {
+        setMyReview(x);
+        setValue("content", x?.content);
+        setValue("rating", x?.rating);
+        return true;
+      }
+    });
+    console.log("pos ", pos);
+    if (pos && pos != -1) {
+      const removedItem = book?.reviews?.splice(pos, 1); // Remove the nth item\
+      console.log("removedItem ", removedItem);
+      book?.reviews.unshift(removedItem[0]); // Add it to the beginning of the array
+    }
+
+    setReviews(book?.reviews);
+  }, [book]);
 
   useEffect(() => {
     if (id) {
-      // console.log(id);
+      setValue("bookId", id);
       getBookById(id);
     }
     window.scrollTo({
@@ -26,7 +91,7 @@ const BookDetails = () => {
   useEffect(() => {
     const loadImages = async () => {
       try {
-        let url = book?.images?.[0];
+        let url = bookDetails?.images?.[0];
         const response = await fetch(url);
         // console.log(response);
         if (response.ok) {
@@ -42,22 +107,93 @@ const BookDetails = () => {
     };
 
     //check if image exist
-    if (book?.images?.length) {
+    if (bookDetails?.images?.length) {
       const imageUrlRegex = /\.(jpeg|jpg|gif|png)$/i;
-      const isValidImageUrl = imageUrlRegex.test(book?.images?.[0]);
+      const isValidImageUrl = imageUrlRegex.test(bookDetails?.images?.[0]);
       if (isValidImageUrl) loadImages();
       else setImageState(-1);
     } else {
       setImageState(-1);
     }
-  }, [book?.images]);
+  }, [bookDetails?.images]);
+
+  useEffect(() => {
+    setValue("userId", userId);
+    setValue("userName", userName);
+  }, [userId, userName]);
+
+  const submitReview = (data) => {
+    if (userId) {
+      if (!getValues("content") && !getValues("rating")) {
+        bottomEndToast.fire({
+          icon: "error",
+          title: "You can't give both the values empty",
+        });
+        return;
+      }
+      const obj = {};
+      if (myReview?._id) {
+        //perform update operation
+        if (getValues("content")) {
+          obj.content = getValues("content");
+        }
+        if (getValues("rating")) {
+          obj.rating = getValues("rating");
+        }
+        obj.reviewId = myReview?._id;
+        console.log("review obj for update ", obj);
+        updateReview(obj);
+      } else {
+        //perform insert operation
+        if (!getValues("rating")) {
+          // console.log("-----------------");
+          bottomEndToast.fire({
+            icon: "error",
+            title: "Must provide rating.",
+          });
+        } else {
+          obj.userId = userId;
+          obj.bookId = id;
+          obj.content = getValues("content");
+          obj.rating = getValues("rating");
+          console.log("review obj for insert ", obj);
+          insertReview(obj);
+        }
+      }
+    } else {
+      bottomEndToast.fire({ icon: "error", message: "You are not authorized" });
+    }
+  };
+
+  useEffect(() => {
+    if (insertMessage) {
+      getBookById(id);
+    }
+    if (isLoadingInsert == false && insertMessage) {
+      let icon = insertSuccess ? "success" : "error";
+      bottomEndToast.fire({
+        icon: icon,
+        title: insertMessage,
+      });
+    }
+  }, [isLoadingInsert, insertMessage, insertSuccess]);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      getBookById(id);
+    }
+    if (isLoadingUpdate == false && updateMessage) {
+      let icon = updateSuccess ? "success" : "error";
+      bottomEndToast.fire({
+        icon: icon,
+        title: updateMessage,
+      });
+    }
+  }, [isLoadingUpdate, updateMessage, updateSuccess]);
 
   return (
     <div className="container">
       <div className="book-details-container">
-        {/* <h2>book details</h2>
-        <h2>{id}</h2>
-        <h3>{book.title}</h3> */}
         <div class="book-container">
           <div class="book-details">
             <div class="book-image">
@@ -67,7 +203,9 @@ const BookDetails = () => {
                 </div>
               ) : (
                 <img
-                  src={`${imageState == 1 ? book?.images?.[0] : demobook}`}
+                  src={`${
+                    imageState == 1 ? bookDetails?.images?.[0] : demobook
+                  }`}
                   alt="book image"
                   width="140px"
                   height="180px"
@@ -76,34 +214,36 @@ const BookDetails = () => {
             </div>
             <div class="book-info-container">
               <div class="book-info">
-                <small class="company-name">{book?.category?.[0]}</small>
+                <small class="company-name">{bookDetails?.category?.[0]}</small>
                 <h1 className="book-title">
-                  {book?.title}
+                  {bookDetails?.title}
                   <br />
-                  {book?.author && book?.author != "Unknown" && (
-                    <small>Written by {book?.author}</small>
+                  {bookDetails?.author && bookDetails?.author != "Unknown" && (
+                    <small>Written by {bookDetails?.author}</small>
                   )}
                 </h1>
-                <p class="book-description">Language : {book.language},</p>
+                <p class="book-description">
+                  Language : {bookDetails.language},
+                </p>
                 <div>
-                  <RatingStar rating={book?.rating} />
+                  <RatingStar rating={bookDetails?.rating} />
                 </div>
 
                 <h3>
-                  {book?.discountPercentage ? (
+                  {bookDetails?.discountPercentage ? (
                     <>
-                      {book?.newPrice}
+                      {bookDetails?.newPrice}
                       <small class="discount">
-                        - {book?.discountPercentage}%
+                        - {bookDetails?.discountPercentage}%
                       </small>
                     </>
                   ) : (
-                    <>{book.price}</>
+                    <>{bookDetails.price}</>
                   )}
                 </h3>
 
-                {book?.discountPercentage ? (
-                  <p class="previous-price">{book?.price}</p>
+                {bookDetails?.discountPercentage ? (
+                  <p class="previous-price">{bookDetails?.price}</p>
                 ) : (
                   <>{"  "}</>
                 )}
@@ -122,6 +262,142 @@ const BookDetails = () => {
                   </svg>
                   <p>Add to cart</p>
                 </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <h2>Reviews</h2>
+              <div className="reviews">
+                <div className="review-form-container">
+                  <form
+                    onSubmit={handleSubmit(submitReview)}
+                    className="review-form"
+                    autoComplete="off"
+                  >
+                    <h2>Write your review</h2>
+                    {/* user name */}
+                    <div>
+                      <label htmlFor="userName">User Name:</label>
+                      <Controller
+                        name="userName"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            placeholder="Enter user name"
+                            {...field}
+                            type="text"
+                            style={{
+                              border: errors?.userName ? "1px solid red" : "",
+                            }}
+                            disabled
+                          />
+                        )}
+                      />
+                    </div>
+
+                    {/* content */}
+                    <div>
+                      <label htmlFor="content">Content:</label>
+                      <Controller
+                        name="content"
+                        control={control}
+                        rules={{
+                          // required: "Content must be provided",
+                          maxLength: {
+                            value: 70,
+                            message: "Maximum length is 70",
+                          },
+                          // minLength: {
+                          //   value: 5,
+                          //   message: "Minimum length is 5",
+                          // },
+                        }}
+                        render={({ field }) => (
+                          <textarea
+                            placeholder="Enter Content"
+                            {...field}
+                            type="text-area"
+                            // required
+                            minlength="5"
+                            style={{
+                              border: errors?.content ? "1px solid red" : "",
+                            }}
+                          />
+                        )}
+                      />
+                      <span
+                        className={`${
+                          errors?.content?.message
+                            ? "error-message-visible"
+                            : "error-message"
+                        }`}
+                      >
+                        *{` ${errors?.content?.message}`}
+                      </span>
+                    </div>
+
+                    {/* rating */}
+                    <div>
+                      <label htmlFor="rating">Rating:</label>
+                      <Controller
+                        name="rating"
+                        control={control}
+                        rules={
+                          {
+                            // required: "rating is required",
+                            // min: {
+                            //   value: 0,
+                            //   message: "Rating minimum value is 0",
+                            // },
+                            // max: {
+                            //   value: 5,
+                            //   message: "Rating maximum value is 5",
+                            // },
+                          }
+                        }
+                        render={({ field }) => (
+                          <input
+                            placeholder="Enter Rating"
+                            {...field}
+                            type="number"
+                            step="0.01"
+                            // required
+                            min="1"
+                            max="5"
+                            style={{
+                              border: errors?.rating ? "1px solid red" : "",
+                            }}
+                          />
+                        )}
+                      />
+
+                      <span
+                        className={`${
+                          errors?.rating?.message
+                            ? "error-message-visible"
+                            : "error-message"
+                        }`}
+                      >
+                        *{`${errors?.rating?.message}`}
+                      </span>
+                    </div>
+
+                    <div>
+                      <input type="submit" value="Submit" />
+                    </div>
+                  </form>
+                </div>
+
+                {isLoadingBookById ? (
+                  <Spinner />
+                ) : (
+                  <div className="review-container">
+                    {reviews?.map((x) => (
+                      <ReviewCard props={x} key={x?._id} />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

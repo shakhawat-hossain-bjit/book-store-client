@@ -23,6 +23,10 @@ const useBookHook = () => {
   const [isLoadingBook, setIsLoadingBook] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const [bookByIdMessage, setBookByIdMessage] = useState("");
+  const [isLoadingBookById, setIsLoadingBookById] = useState(false);
+  const [bookByIdSuccess, setBookByIdSuccess] = useState(false);
+
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [updateMessage, setUpdateMessage] = useState(false);
   const [updateSucccess, setUpdateSucccess] = useState(false);
@@ -50,14 +54,15 @@ const useBookHook = () => {
   } = bookAPI();
 
   const getBookById = (_id) => {
-    setIsLoadingBook(true);
-    setMessage("");
+    setIsLoadingBookById(true);
+    setBookByIdMessage("");
+    setBook({});
     findBook(_id)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setBook(data?.data);
-        setMessage(data?.message);
-        setSuccess(true);
+        setBookByIdMessage(data?.message);
+        setBookByIdSuccess(true);
       })
       .catch((e) => {
         let message = "";
@@ -66,11 +71,12 @@ const useBookHook = () => {
         } else {
           message = "Failed to load!";
         }
-        setSuccess(false);
-        setMessage(message);
+        setBookByIdSuccess(false);
+        setBookByIdMessage(message);
+        setBook({});
       })
       .finally(() => {
-        setIsLoadingBook(false);
+        setIsLoadingBookById(false);
       });
   };
 
@@ -292,7 +298,11 @@ const useBookHook = () => {
     getBooksByRating,
     getBooksByPrice,
     getBooksByView,
+
     getBookById,
+    isLoadingBookById,
+    bookByIdMessage,
+    bookByIdSuccess,
 
     deleteBookById,
     isLoadingDelete,

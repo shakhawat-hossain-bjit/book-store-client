@@ -17,7 +17,7 @@ const bookAPI = () => {
   };
 
   const getSearchedBook = async (queryParams) => {
-    // console.log(queryParams);
+    console.log(queryParams);
     let url = `/books/all?`;
     if (queryParams?.text) {
       url += `search=${queryParams?.text}&`;
@@ -25,6 +25,17 @@ const bookAPI = () => {
     if (queryParams?.page) {
       url += `page=${queryParams?.page}&`;
     }
+    if (queryParams?.sortParam) {
+      url += `sortParam=${queryParams?.sortParam}&`;
+    }
+    if (queryParams?.sortOrder) {
+      url += `sortOrder=${queryParams?.sortOrder}&`;
+    }
+    if (queryParams?.category != "") {
+      url += `category=${queryParams?.category}&`;
+    }
+
+    console.log(url);
 
     const data = await axiosInstance.get(`${url}`).then((res) => res.data);
     return data;

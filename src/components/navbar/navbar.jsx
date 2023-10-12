@@ -36,13 +36,10 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // console.log(search, location);
-    if (search || location?.pathname == "/books") {
-      const timeOutFunc = setTimeout(() => {
-        dispatch(searchBookKeywordReducer(search));
-        navigate(`/books`);
-      }, 1500);
-      return () => clearTimeout(timeOutFunc);
+    dispatch(searchBookKeywordReducer(search));
+
+    if (location.pathname != "/books") {
+      navigate("/books");
     }
   }, [search]);
 
