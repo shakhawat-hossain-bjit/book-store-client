@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import transactionAPI from "../../api/transaction/transactionAPI";
+import { loadCartReducer } from "../../store/slices/cartReducer";
 
 const useTransactiontHook = () => {
   const [mytransaction, setMyTransaction] = useState([]);
@@ -9,6 +10,8 @@ const useTransactiontHook = () => {
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+
+  const dispatch = useDispatch();
 
   const { loadTransactionOfUser, loadAll, checkOut } = transactionAPI();
 
@@ -56,6 +59,7 @@ const useTransactiontHook = () => {
     console.log(obj);
     checkOut(obj)
       .then((data) => {
+        dispatch(loadCartReducer());
         setCheckoutMessage(data?.message);
         setCheckoutSuccess(true);
       })

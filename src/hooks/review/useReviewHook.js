@@ -13,7 +13,11 @@ const useReviewHook = () => {
   const [updateMessage, setUpdateMessage] = useState("");
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  const { create, update } = reviewAPI();
+  const [isLoadingRemove, setIsLoadingRemove] = useState(false);
+  const [removeMessage, setRemoveMessage] = useState("");
+  const [removeSuccess, setRemoveSuccess] = useState(false);
+
+  const { create, update, remove } = reviewAPI();
 
   const insertReview = (obj) => {
     setIsLoadingInsert(true);
@@ -59,6 +63,28 @@ const useReviewHook = () => {
       });
   };
 
+  const removeReview = (obj) => {
+    setIsLoadingRemove(true);
+    remove(obj)
+      .then((data) => {
+        setUpdateMessage(data?.message);
+        setRemoveSuccess(true);
+      })
+      .catch((e) => {
+        let txt = "";
+        if (e?.response?.data?.message) {
+          txt = e?.response?.data?.message;
+        } else {
+          txt = "Failed to add review!";
+        }
+        setRemoveMessage(txt);
+        setRemoveSuccess(false);
+      })
+      .finally(() => {
+        setIsLoadingRemove(false);
+      });
+  };
+
   return {
     isLoadingInsert,
     insertMessage,
@@ -69,6 +95,11 @@ const useReviewHook = () => {
     isLoadingUpdate,
     updateMessage,
     updateSuccess,
+
+    removeReview,
+    isLoadingRemove,
+    removeMessage,
+    removeSuccess,
   };
 };
 

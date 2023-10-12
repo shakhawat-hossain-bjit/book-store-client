@@ -5,8 +5,11 @@ import CartItem from "./cartItem/cartItem";
 
 import useTransactiontHook from "../../hooks/transaction/useTransactionHook";
 import { bottomEndToast } from "../../utils/swalCreate";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
+
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   let { books, total } = useSelector((x) => x.cart);
@@ -28,7 +31,7 @@ const Cart = () => {
   // console.log("cartItems ", cartItems.length);
 
   const checkOutCart = () => {
-    console.log("checkout");
+    // console.log("checkout");
     if (userId) checkOutByUser({ userId });
   };
 
@@ -40,6 +43,9 @@ const Cart = () => {
         title: checkoutMessage,
       });
     }
+    if (checkoutSuccess) {
+      navigate("/user/transaction");
+    }
   }, [isLoadingCheckout, checkoutMessage, checkoutSuccess]);
 
   // console.log(isLoadingCheckout);
@@ -50,7 +56,7 @@ const Cart = () => {
         <div className=" cart-container">
           <h1 className="cart-title">Cart</h1>
           <hr />
-          {cartItems?.length == 0 ? (
+          {!cartItems || cartItems?.length == 0 ? (
             <div className="cart-empty-message">
               <h3>There is no item</h3>
             </div>

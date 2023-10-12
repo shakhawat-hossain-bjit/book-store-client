@@ -37,6 +37,10 @@ const BookDetails = () => {
     isLoadingUpdate,
     updateMessage,
     updateSuccess,
+    removeReview,
+    isLoadingRemove,
+    removeMessage,
+    removeSuccess,
   } = useReviewHook();
 
   const {
@@ -67,7 +71,7 @@ const BookDetails = () => {
         return true;
       }
     });
-    console.log("pos ", pos);
+    // console.log("pos ", pos);
     if (pos && pos != -1) {
       const removedItem = book?.reviews?.splice(pos, 1); // Remove the nth item\
       console.log("removedItem ", removedItem);
@@ -126,7 +130,6 @@ const BookDetails = () => {
     if (userId) {
       if (!getValues("content") && !getValues("rating")) {
         bottomEndToast.fire({
-          icon: "error",
           title: "You can't give both the values empty",
         });
         return;
@@ -148,7 +151,6 @@ const BookDetails = () => {
         if (!getValues("rating")) {
           // console.log("-----------------");
           bottomEndToast.fire({
-            icon: "error",
             title: "Must provide rating.",
           });
         } else {
@@ -161,35 +163,56 @@ const BookDetails = () => {
         }
       }
     } else {
-      bottomEndToast.fire({ icon: "error", message: "You are not authorized" });
+      bottomEndToast.fire({ message: "You are not authorized" });
     }
   };
 
   useEffect(() => {
-    if (insertMessage) {
-      getBookById(id);
-    }
+    // console.log("insertSuccess ", insertSuccess);
+    getBookById(id);
     if (isLoadingInsert == false && insertMessage) {
       let icon = insertSuccess ? "success" : "error";
       bottomEndToast.fire({
-        icon: icon,
         title: insertMessage,
       });
     }
   }, [isLoadingInsert, insertMessage, insertSuccess]);
 
   useEffect(() => {
-    if (updateSuccess) {
-      getBookById(id);
-    }
+    // console.log("updateSuccess ", updateSuccess);
+    // if (updateSuccess) {
+    getBookById(id);
+    // }
     if (isLoadingUpdate == false && updateMessage) {
       let icon = updateSuccess ? "success" : "error";
       bottomEndToast.fire({
-        icon: icon,
         title: updateMessage,
       });
     }
   }, [isLoadingUpdate, updateMessage, updateSuccess]);
+
+  useEffect(() => {
+    // console.log("removeSuccess ", removeSuccess);
+    // if (removeSuccess) {
+    getBookById(id);
+    // }
+    if (isLoadingRemove == false && removeMessage) {
+      let icon = removeSuccess ? "success" : "error";
+      bottomEndToast.fire({
+        title: removeMessage,
+      });
+      return;
+    }
+    if (removeSuccess) {
+      setValue("content", "");
+      setValue("rating", "");
+      setMyReview({});
+    }
+  }, [isLoadingRemove, removeMessage, removeSuccess]);
+
+  const deleteReviewFunction = (id) => {
+    removeReview(id);
+  };
 
   return (
     <div className="container">
@@ -394,7 +417,11 @@ const BookDetails = () => {
                 ) : (
                   <div className="review-container">
                     {reviews?.map((x) => (
-                      <ReviewCard props={x} key={x?._id} />
+                      <ReviewCard
+                        deleteReviewFunction={deleteReviewFunction}
+                        props={x}
+                        key={x?._id}
+                      />
                     ))}
                   </div>
                 )}

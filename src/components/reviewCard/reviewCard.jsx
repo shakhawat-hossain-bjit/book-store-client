@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./reviewCard.style.scss";
 import { SlUser } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
 import RatingStar from "../ratingStart/ratingStar";
 import { useSelector } from "react-redux";
+import useReviewHook from "../../hooks/review/useReviewHook";
 
-const ReviewCard = ({ props }) => {
-  const { content, rating, createdAt, userId: reviewrId } = props;
+const ReviewCard = ({ props, deleteReviewFunction }) => {
+  const { content, rating, updatedAt, userId: reviewrId, _id } = props;
 
   const { userId } = useSelector((state) => state.user);
+
+  const { removeReview, isLoadingRemove, removeMessage, removeSuccess } =
+    useReviewHook();
 
   let convertToPrettier = (time) => {
     const date = new Date(time);
@@ -27,7 +31,10 @@ const ReviewCard = ({ props }) => {
     return arr;
   };
 
-  const deleteReview = () => {};
+  const deleteReview = () => {
+    console.log("delete review Id ", _id);
+    deleteReviewFunction(_id);
+  };
 
   return (
     <div className="review-card-container">
@@ -35,7 +42,7 @@ const ReviewCard = ({ props }) => {
         <button
           className="delete-button"
           onClick={() => {
-            deleteReview;
+            deleteReview();
           }}
         >
           <MdDelete size={20} />
@@ -48,7 +55,7 @@ const ReviewCard = ({ props }) => {
         </div>
         <div className="name-container">
           <p>Anonymus User</p>
-          <small>{convertToPrettier(createdAt)}</small>
+          <small>{convertToPrettier(updatedAt)}</small>
         </div>
       </div>
       <div className="review-body">

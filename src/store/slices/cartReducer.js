@@ -14,8 +14,8 @@ const cartSlice = createSlice({
   reducers: {
     loadCartReducer: (state, action) => {
       state.isLoadingCart = true;
-      state.books = action.payload?.books;
-      state.total = action.payload?.totalPrice;
+      state.books = action.payload?.books || [];
+      state.total = action.payload?.totalPrice || 0;
     },
     addToCartReducer: (state, action) => {
       // state.isLoadingAdd = true;
@@ -43,7 +43,7 @@ const cartSlice = createSlice({
       }
       // console.log("mappedBooks ", mappedBooks);
       state.books = mappedBooks;
-      state.total = Number(state.total + obj.price);
+      state.total = Number((state.total + obj.price).toFixed(2));
     },
 
     removeFromCartReducer: (state, action) => {

@@ -16,9 +16,17 @@ const reviewAPI = () => {
     return data;
   };
 
+  const remove = async (id) => {
+    let data = await axiosInstanceToken
+      .delete(`/reviews/delete/${id}`)
+      .then((res) => res.data);
+    return data;
+  };
+
   return {
     create,
     update,
+    remove,
   };
 };
 

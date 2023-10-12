@@ -57,7 +57,7 @@ const useCartHook = () => {
   };
 
   const remove = (obj) => {
-    // console.log("hook ", obj);
+    console.log("hook ", obj);
     setIsLoadingCart(true);
     setMessage("");
     removeFromCart(obj)
