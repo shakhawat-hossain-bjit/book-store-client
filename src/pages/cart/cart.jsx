@@ -31,7 +31,9 @@ const Cart = () => {
   useEffect(() => {
     console.log(cartItems);
     let total = 0;
-    cartItems.forEach((x) => (total += x.price * x.quantity));
+    cartItems.forEach(
+      (x) => (total += Number((x.price * x.quantity).toFixed(2)))
+    );
     setTotalPrice(total.toFixed(2));
   }, [cartItems]);
 

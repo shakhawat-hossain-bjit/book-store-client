@@ -131,17 +131,9 @@ const Navbar = () => {
           >
             {userInfo.email ? (
               <div className="options">
-                {userInfo?.role == 1 && (
-                  <div>
-                    <Link to="/dashboard/book/add">Insert Product</Link>
-                  </div>
-                )}
-
-                {userInfo?.role == 1 && (
-                  <div>
-                    <Link to="/dashboard/transaction">Transactions</Link>
-                  </div>
-                )}
+                <div>
+                  <Link to="profile">Profile</Link>
+                </div>
 
                 {userInfo?.role == 2 && (
                   <div>

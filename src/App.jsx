@@ -27,6 +27,7 @@ import Balance from "./pages/balance/balance";
 import Dashboard from "./pages/dashboard/dashboard";
 import UserList from "./pages/userList/userList";
 import Profile from "./pages/profile/profile";
+import CommonRoute from "./pages/authenticate/commonRoute";
 
 function App() {
   const { userId, role } = useSelector((state) => state.user);
@@ -69,30 +70,23 @@ function App() {
               <Route path="insert-book" element={<InsertBook />} />
               <Route path="update-book/:bookId" element={<UpdateBook />} />
               <Route path="user" element={<UserList />} />
+              <Route path="transaction" element={<Transaction />} />
             </Route>
-            {/* <Route path="user">
-              <Route path="all" element={<UserList />} />
-            </Route> */}
-            <Route path="transaction" element={<Transaction />} />
-
-            {/* <Route path="/profile" element={<Profile />}>
-              <Route path="edit" element={<EditProfile />} />
-              <Route path="delete" element={<DeleteProfile />} />
-            </Route> */}
           </Route>
+
           <Route path="/user" element={<UserRoute />}>
             <Route path="cart" element={<Cart />} />
             <Route path="transaction" element={<Transaction />} />
             <Route path="balance" element={<Balance />} />
-            {/* <Route path="/update-product" element={<UpdateProduct />} />
-            <Route path="/delete-product" element={<DeleteProduct />} />
-            <Route path="/profile" element={<Profile />}>
-              <Route path="edit" element={<EditProfile />} />
-              <Route path="delete" element={<DeleteProfile />} />
-            </Route> */}
           </Route>
+
+          <Route path="/" element={<CommonRoute />}>
+            <Route path="profile" element={<Profile />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
+
         <Footer />
       </BrowserRouter>
     </>

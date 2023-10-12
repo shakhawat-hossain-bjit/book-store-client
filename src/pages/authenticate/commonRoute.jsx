@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import userAPI from "../../api/userAPI";
 
-const UserRoute = () => {
+const CommonRoute = () => {
   const [userInfo, setUserInfo] = useState({});
   const { email, role, userName } = useSelector((state) => state.user);
 
@@ -12,7 +11,7 @@ const UserRoute = () => {
   // }, [email]);
   // console.log("userInfo ", userInfo);
 
-  return role == 2 ? <Outlet /> : <Navigate to="/" />;
+  return email ? <Outlet /> : <Navigate to="/" />;
 };
 
-export default UserRoute;
+export default CommonRoute;
