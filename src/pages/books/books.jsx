@@ -6,6 +6,7 @@ import Spinner from "../../components/spinner/spinner";
 import BookCard from "../../components/card/bookCard/bookCard";
 import PageNumber from "../../components/pageNumber/pageNumber";
 import useBookHook from "../../hooks/book/useBookHook";
+import FilterSection from "./filterSection/filterSection";
 
 const Books = () => {
   const [searchedText, setSearchedText] = useState([]);
@@ -38,6 +39,10 @@ const Books = () => {
       Math.ceil(searchedbooks?.filteredBookCount / searchedbooks?.limit)
     );
     setIsLoading(isLoadingBook);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [searchedbooks, books, isLoadingBook]);
 
   const selectPageNumber = (page) => {
@@ -58,7 +63,9 @@ const Books = () => {
             </div>
           ) : (
             <div className="book-section-cards-container">
-              <div className="filter-section"></div>
+              <div className="filter-section">
+                <FilterSection />
+              </div>
               <div className="content-section">
                 {filteredBooks?.length > 0 ? (
                   <div className="book-section-cards">
