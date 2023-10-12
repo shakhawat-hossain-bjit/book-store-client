@@ -81,7 +81,7 @@ const BookCard = ({ props }) => {
 
   const bookEditButton = (e) => {
     e.stopPropagation();
-    navigate(`/dashboard/book/update/${_id}`);
+    navigate(`/dashboard/update-book/${_id}`);
   };
 
   const cartButton = (e) => {

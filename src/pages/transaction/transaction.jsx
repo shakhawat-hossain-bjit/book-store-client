@@ -11,13 +11,14 @@ const Transaction = () => {
     useTransactiontHook();
 
   useEffect(() => {
-    if (location.pathname == "/dashboard/cart/transaction")
-      setTrans(transaction);
+    if (location.pathname == "/dashboard/transaction") setTrans(transaction);
     else if (location.pathname == "/user/transaction") setTrans(mytransaction);
   }, [transaction, mytransaction]);
 
+  console.log("transaction", transaction);
+
   useEffect(() => {
-    if (location.pathname == "/dashboard/cart/transaction") loadTransactions();
+    if (location.pathname == "/dashboard/transaction") loadTransactions();
     else if (location.pathname == "/user/transaction") loadTransactionById();
   }, []);
 

@@ -25,8 +25,15 @@ const Cart = () => {
   useEffect(() => {
     // console.log(books);
     setCartItems(books);
-    setTotalPrice(total);
+    // setTotalPrice(total);
   }, [books, total]);
+
+  useEffect(() => {
+    console.log(cartItems);
+    let total = 0;
+    cartItems.forEach((x) => (total += x.price * x.quantity));
+    setTotalPrice(total.toFixed(2));
+  }, [cartItems]);
 
   // console.log("cartItems ", cartItems.length);
 

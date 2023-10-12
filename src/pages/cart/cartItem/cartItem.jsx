@@ -55,7 +55,6 @@ const CartItem = ({ props }) => {
         userId: userId,
         bookId: _id,
         amount: 1,
-        price: price,
       };
       add(obj);
     } else {
@@ -70,7 +69,6 @@ const CartItem = ({ props }) => {
         userId: userId,
         bookId: _id,
         amount: 1,
-        price,
       };
       console.log("obj ", obj);
       remove(obj);

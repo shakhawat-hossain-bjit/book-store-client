@@ -89,6 +89,13 @@ const Navbar = () => {
               </Link>
             )}
           </li>
+
+          <li>
+            {userInfo.role == 1 && (
+              <Link to="/dashboard/profile">Dashboard</Link>
+            )}
+          </li>
+
           <li>
             {userInfo.role == 2 && (
               <div>
@@ -132,7 +139,13 @@ const Navbar = () => {
 
                 {userInfo?.role == 1 && (
                   <div>
-                    <Link to="/dashboard/cart/transaction">Transactions</Link>
+                    <Link to="/dashboard/transaction">Transactions</Link>
+                  </div>
+                )}
+
+                {userInfo?.role == 2 && (
+                  <div>
+                    <Link to="/user/balance">Balance</Link>
                   </div>
                 )}
 

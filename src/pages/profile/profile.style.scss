@@ -1,0 +1,16 @@
+.user-information-container {
+  margin-top: 70px;
+  margin-bottom: 50px;
+  .user-information {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+
+    h2 {
+      text-align: center;
+    }
+  }
+}

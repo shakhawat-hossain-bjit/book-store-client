@@ -65,6 +65,10 @@ const Books = () => {
 
   const onChangeSortParams = (paramName) => {
     setSortParam(paramName);
+    if (sortOrder == "") {
+      // console.log("declareeeeeeeeeeeeeee");
+      setSortOrder("asc");
+    }
   };
 
   const onChangeSortOrder = (paramName) => {

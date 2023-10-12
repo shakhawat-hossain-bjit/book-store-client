@@ -13,6 +13,7 @@ const InsertBook = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -49,6 +50,16 @@ const InsertBook = () => {
         icon: icon,
         title: insertMessage,
       });
+    }
+    if (insertSucccess) {
+      setValue("title", ""),
+        setValue("author", ""),
+        setValue("price", ""),
+        setValue("stock", ""),
+        setValue("isbn", ""),
+        setValue("pages", ""),
+        setValue("year", ""),
+        setValue("language", "");
     }
   }, [isLoadingInsert, insertMessage, insertSucccess]);
 

@@ -23,6 +23,10 @@ import UpdateBook from "./pages/updateBook/updateBook";
 import InsertBook from "./pages/insertBook/insertBook";
 import Transaction from "./pages/transaction/transaction";
 import BookDetails from "./pages/bookDetails/bookDetails";
+import Balance from "./pages/balance/balance";
+import Dashboard from "./pages/dashboard/dashboard";
+import UserList from "./pages/userList/userList";
+import Profile from "./pages/profile/profile";
 
 function App() {
   const { userId, role } = useSelector((state) => state.user);
@@ -54,15 +58,23 @@ function App() {
           <Route path="/books" element={<Books />} />
           <Route path="/book/:id" element={<BookDetails />} />
 
-          <Route path="/dashboard" element={<AdminRoute />}>
-            <Route path="book">
-              {/* <Route path="transaction" element={<Books />} /> */}
-              <Route path="add" element={<InsertBook />} />
-              <Route path="update/:bookId" element={<UpdateBook />} />
+          <Route element={<AdminRoute />}>
+            {/* <Route path="" element={<Dashboard />}></Route> */}
+            {/* <Route path="/profile" element={<Profile />}>
+              <Route path="edit" element={<EditProfile />} />
+              <Route path="delete" element={<DeleteProfile />} />
+            </Route> */}
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="profile" element={<Profile />} />
+              <Route path="insert-book" element={<InsertBook />} />
+              <Route path="update-book/:bookId" element={<UpdateBook />} />
+              <Route path="user" element={<UserList />} />
             </Route>
-            <Route path="cart">
-              <Route path="transaction" element={<Transaction />} />
-            </Route>
+            {/* <Route path="user">
+              <Route path="all" element={<UserList />} />
+            </Route> */}
+            <Route path="transaction" element={<Transaction />} />
+
             {/* <Route path="/profile" element={<Profile />}>
               <Route path="edit" element={<EditProfile />} />
               <Route path="delete" element={<DeleteProfile />} />
@@ -71,6 +83,7 @@ function App() {
           <Route path="/user" element={<UserRoute />}>
             <Route path="cart" element={<Cart />} />
             <Route path="transaction" element={<Transaction />} />
+            <Route path="balance" element={<Balance />} />
             {/* <Route path="/update-product" element={<UpdateProduct />} />
             <Route path="/delete-product" element={<DeleteProduct />} />
             <Route path="/profile" element={<Profile />}>

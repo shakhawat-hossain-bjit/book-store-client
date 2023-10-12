@@ -5,7 +5,7 @@ const initialState = {
   isLoadingCart: false,
   isLoadingAdd: false,
   isLoadingRemove: false,
-  total: 0,
+  // total: 0,
 };
 
 const cartSlice = createSlice({
@@ -43,7 +43,7 @@ const cartSlice = createSlice({
       }
       // console.log("mappedBooks ", mappedBooks);
       state.books = mappedBooks;
-      state.total = Number((state.total + obj.price).toFixed(2));
+      // state.total = Number((state.total + obj.price).toFixed(2));
     },
 
     removeFromCartReducer: (state, action) => {
@@ -61,7 +61,7 @@ const cartSlice = createSlice({
       });
       console.log("mappedBooks ", mappedBooks);
       state.books = mappedBooks;
-      state.total = Number((state.total - action?.payload?.price).toFixed(2));
+      // state.total = Number((state.total - action?.payload?.price).toFixed(2));
     },
 
     lodingFinishedReducer: (state, action) => {
