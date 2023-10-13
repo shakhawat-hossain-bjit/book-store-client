@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./profile.style.scss";
 import { useSelector } from "react-redux";
-import { axiosInstance } from "../../utils/axiosCreate";
+import { axiosInstance, axiosInstanceToken } from "../../utils/axiosCreate";
+import useUserHook from "../../hooks/user/useUserHook";
 const Profile = () => {
-  const [user, setUser] = useState({});
+  const { userId } = useSelector((state) => state.user);
+  const [userInfo, setUserInfo] = useState({});
   let token = localStorage.getItem("token");
+  const { getUserById, user } = useUserHook();
 
   useEffect(() => {
     //   console.log(token);
-    if (token) {
-      axiosInstance
-        .get(`/auth/check-me/${token}`)
-        .then((res) => res.data)
-        .then((data) => {
-          // user is valid
-          // console.log(data?.data);
-          // dispatch(loadUserInfo(data?.data));
-          setUser(data?.data);
-        })
-        .catch((e) => {
-          console.log(e);
-          console.log("Error: ", e?.response?.statusText);
-          // dispatch(signOutReducer());
-        })
-        .finally(() => {
-          // dispatch(loadingFinishedReducer("isLoadingUser"));
-        });
+    if (userId) {
+      getUserById(userId);
     }
-  }, [token]);
+  }, [userId]);
+
+  useEffect(() => {
+    setUserInfo(user);
+  }, [user]);
+
   return (
     <div className="user-information-container">
       <div className="user-information ">
         <h2>My Profile</h2>
-        <h2>{user?.userName}</h2>
+        <h2>{userInfo?.userName}</h2>
+        <h3>{userInfo?.email}</h3>
+        <h3>{userInfo?.phone}</h3>
+        <h3>{userInfo?.wallet?.balance}</h3>
       </div>
     </div>
   );
