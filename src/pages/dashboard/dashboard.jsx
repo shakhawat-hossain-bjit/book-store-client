@@ -38,10 +38,10 @@ const Dashboard = () => {
             <Link to="/books">Delete Book</Link>
           </p>
           <p>
-            <Link to="/books">View Transaction</Link>
+            <Link to="/dashboard/transaction">View Transaction</Link>
           </p>
         </div>
-        <button className="sidebar-btn">Back to home</button>
+        {/* <button className="sidebar-btn">Back to home</button> */}
       </div>
       <div className="content">
         <Outlet />

@@ -4,8 +4,10 @@ import "./balance.style.scss";
 import useWalletHook from "../../hooks/wallet/useWalletHook";
 import { Controller, useForm } from "react-hook-form";
 import { bottomEndToast } from "../../utils/swalCreate";
+import { redirect, useNavigate } from "react-router-dom";
 
 const Balance = () => {
+  const navigate = useNavigate();
   const { email, role, userName, userId } = useSelector((state) => state.user);
   const {
     handleSubmit,
@@ -36,12 +38,15 @@ const Balance = () => {
   }, [userName]);
 
   useEffect(() => {
-    if (isLoadingUpdate == false && updateMessage) {
+    if (isLoadingUpdate == false && updateSuccess) {
       let icon = updateSuccess ? "success" : "error";
       bottomEndToast.fire({
         icon: icon,
         title: updateMessage,
       });
+    }
+    if (updateSuccess) {
+      navigate("/profile");
     }
   }, [isLoadingUpdate, updateMessage, updateSuccess]);
 
@@ -114,7 +119,11 @@ const Balance = () => {
         </div>
 
         <div className="recharge-btn-container">
-          <input type="submit" value="Recharge" />
+          <input
+            type="submit"
+            value="Recharge"
+            disabled={isLoadingUpdate ? true : false}
+          />
         </div>
       </form>
     </div>

@@ -50,7 +50,7 @@ const TransactionCard = ({ props }) => {
             <td></td>
             <td></td>
             <td>Total Amount</td>
-            <td>{total}</td>
+            <td>{total.toFixed(2)}</td>
           </tr>
         </table>
       </div>

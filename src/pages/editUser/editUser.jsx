@@ -70,7 +70,7 @@ const EditUser = () => {
   return (
     <div className="insert-product-form">
       <form onSubmit={handleSubmit(handleOnUpdate)}>
-        <h2>Insert Book</h2>
+        <h2>Update User</h2>
 
         {/* userName */}
         <div>

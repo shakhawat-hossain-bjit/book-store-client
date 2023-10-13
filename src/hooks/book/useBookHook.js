@@ -28,15 +28,15 @@ const useBookHook = () => {
   const [bookByIdSuccess, setBookByIdSuccess] = useState(false);
 
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
-  const [updateMessage, setUpdateMessage] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState("");
   const [updateSucccess, setUpdateSucccess] = useState(false);
 
   const [isLoadingInsert, setIsLoadingInsert] = useState(false);
-  const [insertMessage, setInsertMessage] = useState(false);
+  const [insertMessage, setInsertMessage] = useState("");
   const [insertSucccess, setInsertSucccess] = useState(false);
 
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
-  const [deleteMessage, setDeleteMessage] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState("");
   const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   const dispatch = useDispatch();
@@ -221,7 +221,7 @@ const useBookHook = () => {
         if (e?.response?.data?.message) {
           message = e?.response?.data?.message;
         } else {
-          message = "Failed to load!";
+          message = "Failed to delete!";
         }
         setDeleteSuccess(false);
         setDeleteMessage(message);

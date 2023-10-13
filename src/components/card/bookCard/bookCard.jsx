@@ -60,6 +60,8 @@ const BookCard = ({ props }) => {
   }, [isLoadingCart, message, success]);
 
   useEffect(() => {
+    // console.log("DELETE ", isLoadingDelete);
+    // console.log("deleteMessage ", deleteMessage);
     if (isLoadingDelete == false && deleteMessage) {
       let icon = deleteSuccess ? "success" : "error";
       bottomEndToast.fire({
@@ -142,6 +144,7 @@ const BookCard = ({ props }) => {
             <button
               className="book-card-favourite-button"
               onClick={(e) => bookDeleteButton(e)}
+              disabled={isLoadingDelete ? true : false}
             >
               <MdDelete />
             </button>
@@ -151,6 +154,7 @@ const BookCard = ({ props }) => {
             <button
               className="book-card-cart-button"
               onClick={(e) => cartButton(e)}
+              disabled={isLoadingCart ? true : false}
             >
               Add to Cart
             </button>
