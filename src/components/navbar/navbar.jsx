@@ -6,7 +6,7 @@ import { SlHeart, SlHandbag, SlUser } from "react-icons/sl";
 import { GrUserAdmin } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutReducer } from "../../store/slices/userReducer";
-import userAPI from "../../api/userAPI";
+import userAPI from "../../api/userAPI/userAPI";
 import { searchBookKeywordReducer } from "../../store/slices/bookReducer";
 
 const Navbar = () => {

@@ -25,9 +25,10 @@ import Transaction from "./pages/transaction/transaction";
 import BookDetails from "./pages/bookDetails/bookDetails";
 import Balance from "./pages/balance/balance";
 import Dashboard from "./pages/dashboard/dashboard";
-import UserList from "./pages/userList/userList";
 import Profile from "./pages/profile/profile";
 import CommonRoute from "./pages/authenticate/commonRoute";
+import AllUser from "./pages/allUser/allUser";
+import EditUser from "./pages/editUser/editUser";
 
 function App() {
   const { userId, role } = useSelector((state) => state.user);
@@ -69,7 +70,8 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="insert-book" element={<InsertBook />} />
               <Route path="update-book/:bookId" element={<UpdateBook />} />
-              <Route path="user" element={<UserList />} />
+              <Route path="user" element={<AllUser />} />
+              <Route path="user/edit/:id" element={<EditUser />} />
               <Route path="transaction" element={<Transaction />} />
             </Route>
           </Route>

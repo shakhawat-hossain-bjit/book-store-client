@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import userAPI from "../../api/userAPI";
+import userAPI from "../../api/userAPI/userAPI";
 
 const UserRoute = () => {
   const [userInfo, setUserInfo] = useState({});
