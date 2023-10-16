@@ -27,6 +27,8 @@ import Balance from "./pages/balance/balance";
 import Dashboard from "./pages/dashboard/dashboard";
 import UserList from "./pages/userList/userList";
 import Profile from "./pages/profile/profile";
+import ForgetPassword from "./pages/accountRecover/forgetPassword/forgetPassword";
+import ResetPassword from "./pages/accountRecover/resetPassword/resetPassword";
 
 function App() {
   const { userId, role } = useSelector((state) => state.user);
@@ -52,9 +54,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/wishlist" element={<WishList />} />
-          {/* <Route path="/cart" element={<Cart />} /> */}
           <Route path="/register" element={<Register />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route
+            path="/reset-password/:token/:authId"
+            element={<ResetPassword />}
+          />
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="/books" element={<Books />} />
           <Route path="/book/:id" element={<BookDetails />} />
 

@@ -14,10 +14,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loadingFinishedReducer: (state, action) => {
-      console.log(" action ", action);
-      console.log(" state.isLoadingLogin ", state.isLoadingLogin);
+      // console.log(" action ", action);
+      // console.log(" state.isLoadingLogin ", state.isLoadingLogin);
       state[`${action.payload}`] = false;
-      console.log(" state.isLoadingLogin ", state.isLoadingLogin);
+      // console.log(" state.isLoadingLogin ", state.isLoadingLogin);
     },
     loadUserInfo: (state, action) => {
       // console.log(action?.payload);

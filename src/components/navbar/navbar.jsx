@@ -38,7 +38,7 @@ const Navbar = () => {
   useEffect(() => {
     dispatch(searchBookKeywordReducer(search));
 
-    if (location.pathname != "/books") {
+    if (location.pathname != "/books" && search != "") {
       navigate("/books");
     }
   }, [search]);

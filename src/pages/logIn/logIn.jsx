@@ -71,7 +71,7 @@ const Login = () => {
       });
   };
 
-  console.log("isLoading ", isLoading);
+  // console.log("isLoading ", isLoading);
 
   return (
     <div className="login-container">
@@ -169,6 +169,11 @@ const Login = () => {
         <div className="register">
           <p>
             Don't have an account? <Link to="/register">Register</Link>{" "}
+          </p>
+        </div>
+        <div className="register">
+          <p>
+            Forget Password? <Link to="/forget-password">Reset Password</Link>{" "}
           </p>
         </div>
         <div>
