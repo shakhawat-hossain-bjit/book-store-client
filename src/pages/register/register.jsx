@@ -3,7 +3,7 @@ import "./register.style.scss";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/passwordInput";
-import userAPI from "../../api/userAPI";
+import userAPI from "../../api/userAPI/userAPI";
 import { useSelector } from "react-redux";
 import { bottomEndToast } from "../../utils/swalCreate";
 import Loader from "../../loader/loader";

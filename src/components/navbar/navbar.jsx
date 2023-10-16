@@ -6,7 +6,7 @@ import { SlHeart, SlHandbag, SlUser } from "react-icons/sl";
 import { GrUserAdmin } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutReducer } from "../../store/slices/userReducer";
-import userAPI from "../../api/userAPI";
+import userAPI from "../../api/userAPI/userAPI";
 import { searchBookKeywordReducer } from "../../store/slices/bookReducer";
 
 const Navbar = () => {
@@ -131,17 +131,9 @@ const Navbar = () => {
           >
             {userInfo.email ? (
               <div className="options">
-                {userInfo?.role == 1 && (
-                  <div>
-                    <Link to="/dashboard/book/add">Insert Product</Link>
-                  </div>
-                )}
-
-                {userInfo?.role == 1 && (
-                  <div>
-                    <Link to="/dashboard/transaction">Transactions</Link>
-                  </div>
-                )}
+                <div>
+                  <Link to="profile">Profile</Link>
+                </div>
 
                 {userInfo?.role == 2 && (
                   <div>

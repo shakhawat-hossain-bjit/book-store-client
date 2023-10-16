@@ -246,7 +246,7 @@ const BookDetails = () => {
                   )}
                 </h1>
                 <p class="book-description">
-                  Language : {bookDetails.language},
+                  Language : {bookDetails.language}, Stock: {bookDetails.stock}
                 </p>
                 <div>
                   <RatingStar rating={bookDetails?.rating} />

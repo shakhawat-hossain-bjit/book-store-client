@@ -25,8 +25,10 @@ import Transaction from "./pages/transaction/transaction";
 import BookDetails from "./pages/bookDetails/bookDetails";
 import Balance from "./pages/balance/balance";
 import Dashboard from "./pages/dashboard/dashboard";
-import UserList from "./pages/userList/userList";
 import Profile from "./pages/profile/profile";
+import CommonRoute from "./pages/authenticate/commonRoute";
+import AllUser from "./pages/allUser/allUser";
+import EditUser from "./pages/editUser/editUser";
 import ForgetPassword from "./pages/accountRecover/forgetPassword/forgetPassword";
 import ResetPassword from "./pages/accountRecover/resetPassword/resetPassword";
 
@@ -74,31 +76,25 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="insert-book" element={<InsertBook />} />
               <Route path="update-book/:bookId" element={<UpdateBook />} />
-              <Route path="user" element={<UserList />} />
+              <Route path="user" element={<AllUser />} />
+              <Route path="user/edit/:id" element={<EditUser />} />
+              <Route path="transaction" element={<Transaction />} />
             </Route>
-            {/* <Route path="user">
-              <Route path="all" element={<UserList />} />
-            </Route> */}
-            <Route path="transaction" element={<Transaction />} />
-
-            {/* <Route path="/profile" element={<Profile />}>
-              <Route path="edit" element={<EditProfile />} />
-              <Route path="delete" element={<DeleteProfile />} />
-            </Route> */}
           </Route>
+
           <Route path="/user" element={<UserRoute />}>
             <Route path="cart" element={<Cart />} />
             <Route path="transaction" element={<Transaction />} />
             <Route path="balance" element={<Balance />} />
-            {/* <Route path="/update-product" element={<UpdateProduct />} />
-            <Route path="/delete-product" element={<DeleteProduct />} />
-            <Route path="/profile" element={<Profile />}>
-              <Route path="edit" element={<EditProfile />} />
-              <Route path="delete" element={<DeleteProfile />} />
-            </Route> */}
           </Route>
+
+          <Route path="/" element={<CommonRoute />}>
+            <Route path="profile" element={<Profile />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
+
         <Footer />
       </BrowserRouter>
     </>

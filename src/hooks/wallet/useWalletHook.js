@@ -10,6 +10,7 @@ const useWalletHook = () => {
 
   const updateBalance = (obj) => {
     setIsLoadingUpdate(true);
+    setUpdateSuccess(false);
     addMoney(obj)
       .then((data) => {
         setUpdateSuccess(true);

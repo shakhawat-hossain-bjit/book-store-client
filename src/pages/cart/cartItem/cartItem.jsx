@@ -113,13 +113,21 @@ const CartItem = ({ props }) => {
       </div>
 
       <div className="cart-button-container">
-        <button className="cart-item-decrease-btn" onClick={() => removeItem()}>
+        <button
+          className="cart-item-decrease-btn"
+          disabled={isLoadingCart ? true : false}
+          onClick={() => removeItem()}
+        >
           <MdRemove />
         </button>
         <div className="cart-quantity-container">
           <p className="">{quantity}</p>
         </div>
-        <button className="cart-item-increase-btn" onClick={() => addItem()}>
+        <button
+          className="cart-item-increase-btn"
+          disabled={isLoadingCart ? true : false}
+          onClick={() => addItem()}
+        >
           <MdAdd />
         </button>
       </div>
