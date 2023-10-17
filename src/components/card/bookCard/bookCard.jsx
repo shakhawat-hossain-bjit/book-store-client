@@ -20,10 +20,28 @@ const BookCard = ({ props }) => {
     useBookHook();
   const { add, message, success, isLoadingCart } = useCartHook();
 
+  function isUrl(url) {
+    // Regular expression to match the URL pattern
+    var urlPattern =
+      /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    // Check if the URL matches the pattern
+    if (url.match(urlPattern)) {
+      // Check if the URL points to a JavaScript file
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   useEffect(() => {
     const loadImages = async () => {
       try {
-        let url = images[0];
+        let url = "";
+        if (isUrl(images?.[0])) {
+          url = images?.[0];
+        } else {
+          url = `${import.meta.env.VITE_BACKEND}/files/get/${images?.[0]}`;
+        }
         const response = await fetch(url);
         // console.log(response);
         if (response.ok) {
@@ -117,7 +135,14 @@ const BookCard = ({ props }) => {
           </div>
         ) : (
           <img
-            src={`${imageState == 1 ? images[0] : demobook}`}
+            // src={`${imageState == 1 ? images[0] : demobook}`}
+            src={
+              imageState == 1
+                ? isUrl(images?.[0])
+                  ? images?.[0]
+                  : `${import.meta.env.VITE_BACKEND}/files/get/${images?.[0]}`
+                : demobook
+            }
             alt="book image"
             width="140px"
             height="180px"

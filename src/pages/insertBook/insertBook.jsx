@@ -3,10 +3,15 @@ import "./insertBook.style.scss";
 import { useForm, Controller } from "react-hook-form";
 import useBookHook from "../../hooks/book/useBookHook";
 import { bottomEndToast } from "../../utils/swalCreate";
+import bookAPI from "../../api/book/bookAPI";
 
 const InsertBook = () => {
   const { insertSucccess, insertMessage, isLoadingInsert, createBook } =
     useBookHook();
+
+  const { insertBook } = bookAPI();
+
+  const [imgObj, setImgObj] = useState({});
 
   const {
     handleSubmit,
@@ -28,6 +33,14 @@ const InsertBook = () => {
     },
   });
 
+  const handleFileChange = (e) => {
+    const fileObject = e.target.files && e.target.files[0];
+    if (!fileObject) {
+      return;
+    }
+    setImgObj(fileObject);
+  };
+
   const handleOnSubmit = (data) => {
     const book = {
       title: getValues("title"),
@@ -39,8 +52,32 @@ const InsertBook = () => {
       year: getValues("year"),
       language: getValues("language"),
     };
-    console.log("book ---", book);
-    createBook(book);
+    // console.log("book ---", book);
+    // createBook(book)
+    // book.image = imgObj;
+
+    const formData = new FormData();
+    formData.append("title", book?.title);
+    formData.append("author", book?.author);
+    formData.append("price", book?.price);
+    formData.append("stock", book?.stock);
+    formData.append("isbn", book?.isbn);
+    formData.append("pages", book?.pages);
+    formData.append("year", book?.year);
+    formData.append("language", book?.language);
+    formData.append("image", imgObj);
+    console.log(formData);
+
+    insertBook(formData)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log("error ", e);
+      })
+      .finally(() => {
+        console.log("222222");
+      });
   };
 
   useEffect(() => {
@@ -51,16 +88,16 @@ const InsertBook = () => {
         title: insertMessage,
       });
     }
-    if (insertSucccess) {
-      setValue("title", ""),
-        setValue("author", ""),
-        setValue("price", ""),
-        setValue("stock", ""),
-        setValue("isbn", ""),
-        setValue("pages", ""),
-        setValue("year", ""),
-        setValue("language", "");
-    }
+    // if (insertSucccess) {
+    //   setValue("title", ""),
+    //     setValue("author", ""),
+    //     setValue("price", ""),
+    //     setValue("stock", ""),
+    //     setValue("isbn", ""),
+    //     setValue("pages", ""),
+    //     setValue("year", ""),
+    //     setValue("language", "");
+    // }
   }, [isLoadingInsert, insertMessage, insertSucccess]);
 
   return (
@@ -310,6 +347,15 @@ const InsertBook = () => {
             )}
           />
           <span className="error-message">{errors?.stock?.message}</span>
+        </div>
+
+        <div>
+          <label htmlFor="Image">Image:</label>
+          <input
+            placeholder="Enter Image"
+            type="file"
+            onChange={(e) => handleFileChange(e)}
+          />
         </div>
 
         <div className="save-btn">

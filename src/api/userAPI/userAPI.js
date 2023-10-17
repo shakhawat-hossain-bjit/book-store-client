@@ -19,6 +19,7 @@ const userAPI = () => {
 
   const update = async (obj) => {
     const { id, ...other } = obj;
+    // console.log(id, other);
     let data = await axiosInstanceToken
       .patch(`/users/update/${id}`, other)
       .then((res) => res.data);
