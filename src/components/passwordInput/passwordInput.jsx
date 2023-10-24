@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import "./PasswordInput.style.scss";
+import "./passwordInput.style.scss";
 
 const PasswordInput = ({ field, hints, error }) => {
   const [visible, setVisible] = useState(false);

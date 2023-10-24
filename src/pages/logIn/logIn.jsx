@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./login.style.scss";
+import "./logIn.style.scss";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../../components/passwordInput/passwordInput";
